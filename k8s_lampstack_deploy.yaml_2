@@ -81,14 +81,14 @@ spec:
 volumes:
     - name: MYSQL_DATA_DIR
       hostPath:
-        path: ./mysql_data          # The folder ON THE HOST node's file system
-        type: DirectoryOrCreate     # Automatically creates the host folder if it doesn't exist
+        path: ./docker_build/mysql_data          # The folder ON THE HOST node's file system
+        type: DirectoryOrCreate                  # Automatically creates the host folder if it doesn't exist
     - name: MYSQL_CERT_DIR
       hostPath:
-        path: ./certs/mysql
+        path: ./docker_build/certs/mysql
     - name: MY_CNF
       hostPath:
-        path: ./certs/mysql
+        path: ./docker_build/certs/mysql
 
 
 ---
@@ -143,23 +143,23 @@ spec:
 volumes:
     - name: DOCUMENT_ROOT
       hostPath:
-        path: ./htdocs              # The folder ON THE HOST node's file system
-        type: DirectoryOrCreate     # Automatically creates the host folder if it doesn't exist
+        path: ./docker_build/htdocs              # The folder ON THE HOST node's file system
+        type: DirectoryOrCreate                  # Automatically creates the host folder if it doesn't exist
     - name: HTTPD_CERT_DIR
       hostPath:
-        path: ./certs/httpd
+        path: ./docker_build/certs/httpd
     - name: APACHE_LOG
       hostPath:
-        path: ./log/httpd
+        path: ./docker_build/log/httpd
     - name: HTTPD_CONF
       hostPath: 
-        path: ./etc/httpd.conf
+        path: ./docker_build/etc/httpd.conf
     - name: HTTPD-SSL_CONF
       hostPath: 
-        path: ./etc/httpd-ssl.conf
+        path: ./docker_build/etc/httpd-ssl.conf
     - name: MYSQL_CERT_DIR
       hostPath:
-        path: ./certs/mysql
+        path: ./docker_build/certs/mysql
     - name: PHP_INI
       hostPath:
-        path: ./etc/php.ini
+        path: ./docker_build/etc/php.ini
