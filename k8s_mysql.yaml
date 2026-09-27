@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    app: lamp
+spec:
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
+    - name: mysqlx
+      port: 33060
+      targetPort: 33060
+  selector:
+    app: lamp
+    tier: mysql
+  clusterIP: 172.1.0.3
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lamp-mysql
+  labels:
+    app: lamp
+spec:
+  selector:
+    matchLabels:
+      app: lamp
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: lamp
+        tier: mysql
+    spec:
+      containers:
+        - image: lamp-mysql:lts-debian13
+          imagePullPolicy: Never
+          name: lamp-mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: my-secret-pw
+          ports:
+            - containerPort: 3306
+              name: mysql
+            - containerPort: 33060
+              name: mysqlx
+          volumeMounts:
+            - name: MYSQL_DATA_DIR
+              mountPath: /var/lib/mysql  # The folder INSIDE your application container
+            - name: MYSQL_DATA_DIR
+              mountPath: /run/mysqld
+            - name: MYSQL_CERT_DIR
+              mountPath: /opt/mysql/certs
+            - name: MY_CNF
+              mountPath: /etc/my.cnf
+volumes:
+    - name: MYSQL_DATA_DIR
+      hostPath:
+        path: ./docker_build/mysql_data          # The folder ON THE HOST node's file system
+        type: DirectoryOrCreate                  # Automatically creates the host folder if it doesn't exist
+    - name: MYSQL_CERT_DIR
+      hostPath:
+        path: ./docker_build/certs/mysql
+    - name: MY_CNF
+      hostPath:
+        path: ./docker_build/certs/mysql
