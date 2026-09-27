@@ -48,8 +48,10 @@ minikube start --driver=docker
 kubectl apply -f k8s_lampstack_deployment.yaml
 ```
 
-- ""Checking:**
+- **Checking:**
 ```
+kubectl get all
+kubectl get pod
 
 ```
 
