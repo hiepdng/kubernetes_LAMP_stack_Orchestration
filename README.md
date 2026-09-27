@@ -50,12 +50,26 @@ kubectl apply -f k8s_lampstack_deployment.yaml
 
 - **Checking:**
 ```
+minikube status                 #Checks the health of the local subsystem
+minikube ip                     #Show the internal IP address of the Minikube cluster node. 
+minikube profile list           #Shows active profiles and verifies your default target cluster
+kubectl config current-context  #Show current Kubernetes cluster name
+kubectl get po -A               #Lists the core system pods running across all namespaces.
+kubectl cluster-info            #Display cluster information
+
+docker images                   #List all docker images
+docker ps -a                    #Lists running containers on your host machine.
+                                 (eg. gcr.io/k8s-minikube/kicbase)
+
+minikube dashboard              #Automatically opens a web-based Kubernetes user interface in your
+                                 browser to view your cluster visually. 
+
+
+kubectl get nodes               #Checks the status of the single node managed by Minikube.
 kubectl get all
 kubectl get pod
-
+minikube service list
 ```
-
-
 
 
 
