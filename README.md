@@ -14,12 +14,7 @@ The following prerequisites must be available:
 
 <br/>
 
-### Step 1: Starts a local Kubernetes cluster inside a Docker container on your machine
-```
-minikube start --driver=docker
-```
-
-### Step 2: Building LAMP stack images on your local machine  
+### Step 1: Building LAMP stack images on your local machine  
 On a Linux machine, run the following commands to build LAMP stack images:
 
 - **Download the repository**
@@ -38,12 +33,14 @@ sh setup.sh
 ```
 - **Build httpd, mysql, php-fpm images**
 ```
-eval $(minikube docker-env)       #Point the shell to Minikube's internal Docker daemon inside Minikube
-docker compose build --no-cache   #Build the image in this same terminal window. It will compile directly inside Minikube. 
-
+docker compose build --no-cache
 ```
 
-### Step 3: Containerizing and Orchestrating a LAMP with Kubernetes  
+### Step 2: Containerizing and Orchestrating a LAMP with Kubernetes  
+- **Starts a local Kubernetes cluster inside a Docker container on your machine**  
+```
+minikube start --driver=docker
+```
 - **Apply the deployment:**
 ```
 minikube image load lamp-mysql:lts-debian13
@@ -70,8 +67,13 @@ minikube dashboard              #Automatically opens a web-based Kubernetes user
 
 
 kubectl get nodes               #Checks the status of the single node managed by Minikube.
-kubectl get all
+kubectl get all                 #Show Services, Deployments, ReplicaSets, StatefulSets, DaemonSets, Jobs and CronJobs
+
 kubectl get pod
+kubectl describe pods           #Describe all pods
+kubectl describe pod <pod-name> # Describe pod
+kubectl describe pods -l app=lamp
+
 minikube service list
 ```
 
