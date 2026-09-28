@@ -1,5 +1,6 @@
 # <div align="center">$${\color{red}Containerize \space and \space Orchestrate \space a  \space LAMP \space with \space Kubernetes}$$
 
+<br/>
 
 To focus on Kubernetes containerization and orchestration, I include a directory [docker_build](https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_depoyment/tree/main/docker_build), which is a pre-configured LAMP stack IaC from my other project [docker_build_DHI_LAMP_Project](https://github.com/hiepdng/docker_build_DHI_LAMP_Project). All you need to do is to use these code to build the LAMP stack images, then use Kubernetes to containerize and orchestrate the LAMP stack.  
 
@@ -13,7 +14,12 @@ The following prerequisites must be available:
 
 <br/>
 
-### Step 1: Building LAMP stack images on your local machine  
+### Step 1: Starts a local Kubernetes cluster inside a Docker container on your machine
+```
+minikube start --driver=docker
+```
+
+### Step 2: Building LAMP stack images on your local machine  
 On a Linux machine, run the following commands to build LAMP stack images:
 
 - **Download the repository**
@@ -32,12 +38,12 @@ sh setup.sh
 ```
 - **Build httpd, mysql, php-fpm images**
 ```
+eval $(minikube docker-env)       #Point the shell to Minikube's internal Docker daemon inside Minikube
 docker compose build --no-cache
 
 ```
-<br/>
 
-### Step 2: Containerizing and Orchestrating a LAMP with Kubernetes  
+### Step 3: Containerizing and Orchestrating a LAMP with Kubernetes  
 - **Provisions and starts a local Kubernetes cluster inside a Docker container on your machine**
 ```
 minikube start --driver=docker
@@ -47,6 +53,8 @@ minikube start --driver=docker
 ```
 kubectl apply -f k8s_lampstack_deployment.yaml
 ```
+
+<br/>
 
 - **Checking:**
 ```
