@@ -39,24 +39,20 @@ sh setup.sh
 - **Build httpd, mysql, php-fpm images**
 ```
 eval $(minikube docker-env)       #Point the shell to Minikube's internal Docker daemon inside Minikube
-docker compose build --no-cache
+docker compose build --no-cache   #Build the image in this same terminal window. It will compile directly inside Minikube. 
 
 ```
 
 ### Step 3: Containerizing and Orchestrating a LAMP with Kubernetes  
-- **Provisions and starts a local Kubernetes cluster inside a Docker container on your machine**
-```
-minikube start --driver=docker
-```
-
 - **Apply the deployment:**
 ```
-kubectl apply -f k8s_lampstack_deployment.yaml
+minikube image load lamp-mysql:lts-debian13
+kubectl apply -f k8s_lampstack_deployment.yaml  
 ```
 
 <br/>
 
-- **Checking:**
+### Checking:
 ```
 minikube status                 #Checks the health of the local subsystem
 minikube ip                     #Show the internal IP address of the Minikube cluster node. 
