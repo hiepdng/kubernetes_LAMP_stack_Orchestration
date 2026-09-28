@@ -41,6 +41,19 @@ docker compose build --no-cache
 ```
 minikube start --driver=docker
 ```
+- **Mount external volumes:***
+```
+kubectl create configmap multi-path-config \
+  --from-file=/var/lib/mysql=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_data \
+  --from-file=/run/mysqld=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_run \
+  --from-file=/opt/mysql/certs=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/certs/mysql \
+  --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/etc/my.cnf
+
+
+kubectl create configmap multi-path-config \
+  --from-literal=app.properties="setting1=true" \
+  --from-literal=db.json='{"host": "localhost"}'
+```
 - **Apply the deployment:**
 ```
 minikube image load lamp-mysql:lts-debian13
