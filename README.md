@@ -69,15 +69,30 @@ minikube dashboard              #Automatically opens a web-based Kubernetes user
 kubectl get nodes               #Checks the status of the single node managed by Minikube.
 kubectl get all                 #Show Services, Deployments, ReplicaSets, StatefulSets, DaemonSets, Jobs and CronJobs
 
-kubectl get pod
-kubectl describe pods           #Describe all pods
-kubectl describe pod <pod-name> # Describe pod
+kubectl get pod                    #List all pod names, Check pods health
+kubectl get pods --show-labels     #List all pod names with lables
+kubectl describe pods              #Describe all pods
+kubectl describe pod <pod-name>    # Describe pod
 kubectl describe pods -l app=lamp
 
 minikube service list
+kubectl get svc -A                 #List all services in all namespace. Check Existence & IPs
+kubectl get svc                    #List all services in the current namespace. Check Existence & IPs
+kubectl describe svc               #Describe all services. Check Routing (Endpoints)
+kubectl describe svc service_name  #Describe service name. Check Routing (Endpoints)
+
+kubectl logs deployment/lamp-mysql
 ```
+<br/>
 
-
-
+### Kubernetes Clean up:
+- Clean Up All Workloads Across All Namespaces:
+```
+kubectl delete all --all --all-namespaces
+```
+- Reset Bare-Metal/Kubeadm Nodes:
+```
+sudo kubeadm reset
+```
 
 
