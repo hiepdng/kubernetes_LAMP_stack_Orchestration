@@ -35,30 +35,36 @@ sh setup.sh
 ```
 docker compose build --no-cache
 ```
+This will create images on your local machine:  
+    . lamp-httpd:2.4.68-debian13  
+    . lamp-php:8.5.8-debian13-fpm  
+    . lamp-mysql:lts-debian13  
 
 ### Step 2: Containerizing and Orchestrating a LAMP with Kubernetes  
 - **Starts a local Kubernetes cluster inside a Docker container on your machine**  
+  - You need to mount the full path of the **docker_build** directory from your host machine to Minikube cluster for Apache, PHP and Mysql applications to access their files. It is better to mount it here when you start your Minikube cluster.
+  - Note: Your full path to the **docker_build** directory might be different.  
 ```
+minikube start --driver=docker --mount --mount-string=":/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/mnt"
+
+#or without mounting option
 minikube start --driver=docker
 ```
-- **Mount external volumes:**
+- **Mount external volumes:**  
+If you start the minikube cluster without mounting your **docker_build** directory,
+you can mount it here. Remember to keep this command running.
 ```
-#for Apache
-minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/htdocs:/tmp/document-root
-
-#for MySQL
-minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_data:/mysql_data_dir
-minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_run:/mysql_runtime_dir
-minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/certs/mysql:/mysql-cert-dir
-
-kubectl create configmap mysql-config \
-  --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/etc/my.cnf
+minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/tmp
 ```
+
 - **Apply the deployment:**
 ```
+#Load all images from your local machine to Minikube cluster
 minikube image load lamp-httpd:2.4.68-debian13
 minikube image load lamp-php:8.5.8-debian13-fpm
 minikube image load lamp-mysql:lts-debian13
+
+#Apply the deployment
 kubectl apply -f k8s_lampstack_deployment.yaml  
 ```
 <br/>
@@ -108,6 +114,7 @@ kubectl describe svc service_name  #Describe service name. Check Routing (Endpoi
 
 minikube service httpd-service
 
+kubectl logs deployment/lamp-frontend
 kubectl logs deployment/lamp-mysql
 
 kubectl scale deployment lamp-mysql --replicas=0    #stop lamp-mysql app
