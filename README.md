@@ -25,20 +25,22 @@ git clone https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_depoyme
 ```
 docker login dhi.io
 ```
-- **Configure/setup environment**
-  - This will set up directories, create certificates and modify configuration files 
+- **Configure/setup environment**  
+  This will set up directories, create certificates and modify configuration files 
 ```
 cd kubernetes_github_action_LAMP_stack_depoyment/docker_build
 sh setup.sh
 ```
-- **Build httpd, mysql, php-fpm images**
+- **Build httpd, mysql, php-fpm images**  
 ```
 docker compose build --no-cache
 ```
-This will create images on your local machine:  
+This will create images:  
     . lamp-httpd:2.4.68-debian13  
     . lamp-php:8.5.8-debian13-fpm  
     . lamp-mysql:lts-debian13  
+
+<br/>
 
 ### Step 2: Containerizing and Orchestrating a LAMP with Kubernetes  
 - **Starts a local Kubernetes cluster inside a Docker container on your machine**  
