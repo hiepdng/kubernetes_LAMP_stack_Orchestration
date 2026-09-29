@@ -41,18 +41,16 @@ docker compose build --no-cache
 ```
 minikube start --driver=docker
 ```
-- **Mount external volumes:***
+- **Mount external volumes:**
 ```
-kubectl create configmap multi-path-config \
-  --from-file=/var/lib/mysql=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_data \
-  --from-file=/run/mysqld=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_run \
-  --from-file=/opt/mysql/certs=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/certs/mysql \
+minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_data:/mysql_data_dir
+
+minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_run:/mysql_runtime_dir
+
+minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/certs/mysql:/mysql-cert-dir
+
+kubectl create configmap mysql-config \
   --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/etc/my.cnf
-
-
-kubectl create configmap multi-path-config \
-  --from-literal=app.properties="setting1=true" \
-  --from-literal=db.json='{"host": "localhost"}'
 ```
 - **Apply the deployment:**
 ```
@@ -82,7 +80,7 @@ minikube dashboard              #Automatically opens a web-based Kubernetes user
 kubectl get nodes               #Checks the status of the single node managed by Minikube.
 kubectl get all                 #Show Services, Deployments, ReplicaSets, StatefulSets, DaemonSets, Jobs and CronJobs
 
-kubectl get pod                    #List all pod names, Check pods health
+kubectl get pods                   #List all pod names, Check pods health
 kubectl get pods --show-labels     #List all pod names with lables
 kubectl describe pods              #Describe all pods
 kubectl describe pod <pod-name>    # Describe pod
