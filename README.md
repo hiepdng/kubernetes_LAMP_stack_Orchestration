@@ -133,6 +133,9 @@ kubectl describe svc service_name  #Describe service name. Check Routing (Endpoi
 
 minikube service httpd-service
 
+kubectl get configmaps -A                      #Show all ConfigMaps
+kubectl describe configmaps --all-namespaces   #Describe all ConfigMaps
+
 kubectl logs deployment/lamp-frontend
 kubectl logs deployment/lamp-mysql
 
