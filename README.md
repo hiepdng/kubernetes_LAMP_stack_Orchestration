@@ -50,7 +50,7 @@ This will create images:
 minikube start --driver=docker --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/myvol"
 
 #or without mounting option
-note: Remember to keep the command 'minikube mount' running.
+#note: Remember to keep the command 'minikube mount' running.
 minikube start --driver=docker
 minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/tmp
 
@@ -132,8 +132,10 @@ minikube service httpd-service
 kubectl get configmaps -A                      #Show all ConfigMaps
 kubectl describe configmaps --all-namespaces   #Describe all ConfigMaps
 
+#Debug:
 kubectl logs deployment/lamp-frontend
 kubectl logs deployment/lamp-mysql
+kubectl logs lamp-frontend-7bf4f58756-tpsjs -c httpd
 
 kubectl scale deployment lamp-mysql --replicas=0    #stop lamp-mysql app
 ```
