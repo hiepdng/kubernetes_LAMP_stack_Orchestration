@@ -50,9 +50,10 @@ This will create images:
 minikube start --driver=docker --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/myvol"
 
 #or without mounting option
+note: Remember to keep the command 'minikube mount' running.
 minikube start --driver=docker
 minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/tmp
-#note: Remember to keep this command running.
+
 ```
 - **Share external config file using ConfigMap:**  
 Use ConfigMap to access httpd.conf, httpd-ssl.conf and php.ini from your host machine.
@@ -62,18 +63,13 @@ kubectl create configmap httpd-conf \
 --from-file=httpd.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd.conf
 
 kubectl create configmap httpd-ssl-conf \
---from-file=httpd-ssl.config=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd-ssl.conf
+--from-file=httpd-ssl.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd-ssl.conf
 
 kubectl create configmap php-ini \
 --from-file=php.ini=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/php.ini
 
 kubectl create configmap my-conf \
 --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
-
-
-
-
-
 ```
 
 - **Apply the deployment:**
