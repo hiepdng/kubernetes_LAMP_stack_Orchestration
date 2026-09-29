@@ -47,7 +47,7 @@ This will create images:
   - You need to mount the full path of the **docker_build** directory from your host machine to Minikube cluster for Apache, PHP and Mysql applications to access their files. It is better to mount it here when you start your Minikube cluster.
   - Note: Your full path to the **docker_build** directory might be different.  
 ```
-minikube start --driver=docker --mount --mount-string=":/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/mnt"
+minikube start --driver=docker --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/mnt"
 
 #or without mounting option
 minikube start --driver=docker
