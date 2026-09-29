@@ -17,6 +17,8 @@ if [ ! -d "htdocs/uploads" ]; then
     mkdir -p htdocs/uploads
 fi
 
+chmod -R 777 log
+
 # Create a self-signed SSL Certificate for testing purposes:
 openssl genrsa -des3 -passout pass:YourPasswordHere -out certs/httpd/server.key.secure
 openssl rsa -in certs/httpd/server.key.secure -passin pass:YourPasswordHere -out certs/httpd/server.key # decrypted server.key, used for auto start web withour password
