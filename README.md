@@ -47,16 +47,33 @@ This will create images:
   - You need to mount the full path of the **docker_build** directory from your host machine to Minikube cluster for Apache, PHP and Mysql applications to access their files. It is better to mount it here when you start your Minikube cluster.
   - Note: Your full path to the **docker_build** directory might be different.  
 ```
-minikube start --driver=docker --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/mnt"
+minikube start --driver=docker --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/myvol"
 
 #or without mounting option
 minikube start --driver=docker
-```
-- **Mount external volumes:**  
-If you start the minikube cluster without mounting your **docker_build** directory,
-you can mount it here. Remember to keep this command running.
-```
 minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/tmp
+#note: Remember to keep this command running.
+```
+- **Share external config file using ConfigMap:**  
+Use ConfigMap to access httpd.conf, httpd-ssl.conf and php.ini from your host machine.
+
+```
+kubectl create configmap httpd-conf \
+--fromfile=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd.conf
+
+kubectl create configmap httpd-ssl-conf \
+--fromfile=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd-ssl.conf
+
+kubectl create configmap php-ini \
+--fromfile=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/php-ini
+
+kubectl create configmap my-conf \
+--fromfile=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
+
+
+
+
+
 ```
 
 - **Apply the deployment:**
