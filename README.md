@@ -43,10 +43,12 @@ minikube start --driver=docker
 ```
 - **Mount external volumes:**
 ```
+#for Apache
+minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/htdocs:/tmp/document-root
+
+#for MySQL
 minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_data:/mysql_data_dir
-
 minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/mysql_run:/mysql_runtime_dir
-
 minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build/certs/mysql:/mysql-cert-dir
 
 kubectl create configmap mysql-config \
@@ -59,6 +61,16 @@ minikube image load lamp-php:8.5.8-debian13-fpm
 minikube image load lamp-mysql:lts-debian13
 kubectl apply -f k8s_lampstack_deployment.yaml  
 ```
+<br/>
+
+### Access to the LAMP stack webpage:
+Run the following command to forward httpd port 8080 from the Apache pod to your host port 8008
+```
+minikube service httpd-service
+minikube tunnel                                     #For LoadBalancer services
+kubectl port-forward svc/httpd-service 8008:8080    #pod:8080, host:8008
+```
+To access your webpage, goto http://127.0.0.1:8008
 
 <br/>
 
@@ -93,6 +105,8 @@ kubectl get svc -A                 #List all services in all namespace. Check Ex
 kubectl get svc                    #List all services in the current namespace. Check Existence & IPs
 kubectl describe svc               #Describe all services. Check Routing (Endpoints)
 kubectl describe svc service_name  #Describe service name. Check Routing (Endpoints)
+
+minikube service httpd-service
 
 kubectl logs deployment/lamp-mysql
 
