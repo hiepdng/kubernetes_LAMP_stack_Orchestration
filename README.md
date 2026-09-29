@@ -54,6 +54,8 @@ kubectl create configmap mysql-config \
 ```
 - **Apply the deployment:**
 ```
+minikube image load lamp-httpd:2.4.68-debian13
+minikube image load lamp-php:8.5.8-debian13-fpm
 minikube image load lamp-mysql:lts-debian13
 kubectl apply -f k8s_lampstack_deployment.yaml  
 ```
@@ -93,6 +95,8 @@ kubectl describe svc               #Describe all services. Check Routing (Endpoi
 kubectl describe svc service_name  #Describe service name. Check Routing (Endpoints)
 
 kubectl logs deployment/lamp-mysql
+
+kubectl scale deployment lamp-mysql --replicas=0    #stop lamp-mysql app
 ```
 <br/>
 
