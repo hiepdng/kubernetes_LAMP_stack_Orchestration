@@ -61,14 +61,11 @@ Use ConfigMap to access httpd.conf, httpd-ssl.conf and php.ini from your host ma
 ```
 kubectl create configmap httpd-conf --from-file=httpd.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd.conf
 
-kubectl create configmap httpd-ssl-conf \
---from-file=httpd-ssl.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd-ssl.conf
+kubectl create configmap httpd-ssl-conf --from-file=httpd-ssl.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd-ssl.conf
 
-kubectl create configmap php-ini \
---from-file=php.ini=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/php.ini
+kubectl create configmap php-ini --from-file=php.ini=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/php.ini
 
-kubectl create configmap my-conf \
---from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
+kubectl create configmap my-conf --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
 ```
 
 - **Apply the deployment:**
