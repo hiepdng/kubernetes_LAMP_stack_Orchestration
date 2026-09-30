@@ -7,6 +7,12 @@ export $(grep -v '^#' .env | xargs)
 which openssl || { echo 'openssl not found' ; echo Exit...; }
 
 
+chmod -R 777 log
+chmod 777 certs
+chmod 666 certs/httpd/*
+chmod 666 certs/mysql/*
+
+
 ### For HTTPD -----------------------------------------------------------------
 if [ ! -d "certs/httpd" ]; then
     echo "Create ${HTTPD_CERT_DIR} directory."
@@ -16,8 +22,6 @@ if [ ! -d "htdocs/uploads" ]; then
     echo "Create htdocs/uploads directory."
     mkdir -p htdocs/uploads
 fi
-
-chmod -R 777 log
 
 # Create a self-signed SSL Certificate for testing purposes:
 openssl genrsa -des3 -passout pass:YourPasswordHere -out certs/httpd/server.key.secure
