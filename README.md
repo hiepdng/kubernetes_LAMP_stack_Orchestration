@@ -77,7 +77,7 @@ minikube image load lamp-mysql:lts-debian13
 
 #Apply the deployment
 minikube addons enable storage-provisioner
-kubectl apply -f k8s_lampstack_deploy.yaml  
+kubectl apply --validate=true -f k8s_lampstack_deploy.yaml  
 ```
 <br/>
 
@@ -161,6 +161,9 @@ kubectl scale deployment lamp-mysql --replicas=0    #stop lamp-mysql app
 ```
 kubectl delete all --all --all-namespaces
 kubectl delete  all --all --all-namespaces --interactive=false
+
+kubectl delete deployment lamp-mysql-backend
+kubectl delete pvc mysql-pvc
 ```
 - Reset Bare-Metal/Kubeadm Nodes:
 ```
