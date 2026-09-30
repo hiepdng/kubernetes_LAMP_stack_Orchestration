@@ -80,7 +80,7 @@ minikube image load lamp-php:8.5.8-debian13-fpm
 minikube image load lamp-mysql:lts-debian13
 
 #Apply the deployment
-kubectl apply -f k8s_lampstack_deployment.yaml  
+kubectl apply -f k8s_lampstack_deploy.yaml  
 ```
 <br/>
 
