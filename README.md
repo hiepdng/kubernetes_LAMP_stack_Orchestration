@@ -137,6 +137,13 @@ kubectl logs deployment/lamp-frontend
 kubectl logs deployment/lamp-mysql
 kubectl logs lamp-frontend-7bf4f58756-tpsjs -c httpd
 
+#Watch live events
+kubectl get pods -w
+kubectl get events -w
+kubectl events -w --all-namespaces
+
+
+
 kubectl scale deployment lamp-mysql --replicas=0    #stop lamp-mysql app
 ```
 <br/>
