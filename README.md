@@ -76,6 +76,7 @@ minikube image load lamp-php:8.5.8-debian13-fpm
 minikube image load lamp-mysql:lts-debian13
 
 #Apply the deployment
+minikube addons enable storage-provisioner
 kubectl apply -f k8s_lampstack_deploy.yaml  
 ```
 <br/>
@@ -93,6 +94,7 @@ To access your webpage, goto http://127.0.0.1:8008
 
 ### Checking:
 ```
+kubectl get pods -n kube-system #lists all the running and pending pods within the internal kube-system
 minikube status                 #Checks the health of the local subsystem
 minikube ip                     #Show the internal IP address of the Minikube cluster node. 
 minikube profile list           #Shows active profiles and verifies your default target cluster
@@ -132,10 +134,16 @@ kubectl describe configmaps --all-namespaces   #Describe all ConfigMaps
 minikube ssh
 ls -l myvol
 
+#Volume:
+kubectl get pvc
+kubectl describe pvc mysql-pvc
+
 #Debug:
 kubectl logs deployment/lamp-frontend
 kubectl logs deployment/lamp-mysql
 kubectl logs lamp-frontend-7bf4f58756-tpsjs -c httpd
+kubectl logs lamp-mysql-backend-5bc9957c6c-pkpqw -c lamp-mysql
+kubectl describe pod lamp-frontend-7bf4f58756-tpsjs
 
 #Watch live events
 kubectl get pods -w
@@ -152,6 +160,7 @@ kubectl scale deployment lamp-mysql --replicas=0    #stop lamp-mysql app
 - Clean Up All Workloads Across All Namespaces:
 ```
 kubectl delete all --all --all-namespaces
+kubectl delete  all --all --all-namespaces --interactive=false
 ```
 - Reset Bare-Metal/Kubeadm Nodes:
 ```
