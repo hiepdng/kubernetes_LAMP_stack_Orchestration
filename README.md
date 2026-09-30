@@ -65,7 +65,7 @@ kubectl create configmap httpd-ssl-conf --from-file=httpd-ssl.conf=/home/temp/ku
 
 kubectl create configmap php-ini --from-file=php.ini=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/php.ini
 
-kubectl create configmap my-conf --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
+kubectl create configmap my-cnf --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
 ```
 
 - **Apply the deployment:**
@@ -127,6 +127,10 @@ minikube service httpd-service
 
 kubectl get configmaps -A                      #Show all ConfigMaps
 kubectl describe configmaps --all-namespaces   #Describe all ConfigMaps
+
+#Verifying the Mount
+minikube ssh
+ls -l myvol
 
 #Debug:
 kubectl logs deployment/lamp-frontend
