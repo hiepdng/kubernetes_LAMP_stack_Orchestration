@@ -121,6 +121,8 @@ kubectl describe svc                 #Describe all services. Check Routing (Endp
 kubectl describe svc s<ervice_name>  #Describe service name. Check Routing (Endpoints)
 minikube service httpd-service
 kubectl get svc <service_name>
+kubectl get endpoints httpd-service   #Get endpoint service
+
 
 #configMaps:
 kubectl get configmaps -A                      #Show all ConfigMaps
