@@ -15,7 +15,6 @@ spec:
   selector:
     app: lamp
     tier: mysql
-  clusterIP: 172.1.0.3
 
 ---
 apiVersion: v1
@@ -27,24 +26,24 @@ metadata:
 spec:
   ports:
     - name: http
-      port: 8080           #port access insude the cluster network
-      targetPort: 80       #port match the containerPort in the Deployment
+      port: 8080             #port access inside the cluster network
+      targetPort: 8080       #port match the containerPort in the Deployment
     - name: https
       port: 443
       targetPort: 443
   selector:
     app: lamp
     tier: frontend
-  type: NodePort
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lamp-mysql
+  name: lamp-mysql-backend
   labels:
     app: lamp
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: lamp
@@ -59,43 +58,48 @@ spec:
     spec:
       containers:
         - image: lamp-mysql:lts-debian13
-          imagePullPolicy: Never
+          imagePullPolicy: Never         # Forces K8s to only use the local image
           name: lamp-mysql
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: my-secret-pw
+              value: "my-secret-pw"
           ports:
             - containerPort: 3306
               name: mysql
             - containerPort: 33060
               name: mysqlx
           volumeMounts:
-            - name: MYSQL_DATA_DIR
-              mountPath: /var/lib/mysql  # The folder INSIDE your application container
-            - name: MYSQL_DATA_DIR
+            - name: mysql-data-dir
+              mountPath: /var/lib/mysql
+            - name: mysql-runtime-dir
               mountPath: /run/mysqld
-            - name: MYSQL_CERT_DIR
+            - name: mysql-cert-dir
               mountPath: /opt/mysql/certs
-            - name: MY_CNF
-              mountPath: /etc/my.cnf
-volumes:
-    - name: MYSQL_DATA_DIR
-      hostPath:
-        path: ./docker_build/mysql_data          # The folder ON THE HOST node's file system
-        type: DirectoryOrCreate                  # Automatically creates the host folder if it doesn't exist
-    - name: MYSQL_CERT_DIR
-      hostPath:
-        path: ./docker_build/certs/mysql
-    - name: MY_CNF
-      hostPath:
-        path: ./docker_build/certs/mysql
-
+            - name: my-cnf-file
+              mountPath: /etc/mysql/my.cnf
+              subPath: my.cnf
+      volumes:
+      - name: mysql-data-dir
+        hostPath:
+          path: /myvol/mysql_data
+          type: Directory
+      - name: mysql-runtime-dir
+        hostPath:
+          path: /myvol/mysql_run
+          type: Directory
+      - name: mysql-cert-dir
+        hostPath:
+          path: /myvol/certs/mysql
+          type: Directory
+      - name: my-cnf-file
+        configMap:
+          name: my-cnf
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lamp-frontend
+  name: lamp-httpd-php-frontend
   labels:
     app: lamp
 spec:
@@ -120,46 +124,53 @@ spec:
             - containerPort: 80
               name: httpd
           volumeMounts:
-            - name: DOCUMENT_ROOT
+            - name: document-root
               mountPath: /usr/local/apache2/htdocs  # The folder INSIDE your application container
-            - name: HTTPD_CERT_DIR
+            - name: httpd-cert-dir
               mountPath: /usr/local/apache2/conf/certs
-            - name: APACHE_LOG
+            - name: httpd-log
               mountPath: /usr/local/apache2/logs
-            - name: HTTPD_CONF
+            - name: httpd-conf-file
               mountPath: /usr/local/apache2/conf/httpd.conf
-            - name: HTTPD-SSL_CONF
-              mountPath: /usr/local/apache2/conf/extra/httpd-ssl.conf 
+              subPath: httpd.conf
+            - name: httpd-ssl-conf-file
+              mountPath: /usr/local/apache2/conf/httpd-ssl.conf
+              subPath: httpd-ssl.conf
         - image: lamp-php:8.5.8-debian13-fpm
           imagePullPolicy: Never
           name: php-fpm
           volumeMounts:
-            - name: DOCUMENT_ROOT
+            - name: document-root
               mountPath: /var/www/html
-            - name: MYSQL_CERT_DIR
+            - name: mysql-cert-dir
               mountPath: /opt/php/mysql_certs
-            - name: PHP_INI
+            - name: php-ini-file
               mountPath: /opt/php/etc/php/php.ini
-volumes:
-    - name: DOCUMENT_ROOT
-      hostPath:
-        path: ./docker_build/htdocs              # The folder ON THE HOST node's file system
-        type: DirectoryOrCreate                  # Automatically creates the host folder if it doesn't exist
-    - name: HTTPD_CERT_DIR
-      hostPath:
-        path: ./docker_build/certs/httpd
-    - name: APACHE_LOG
-      hostPath:
-        path: ./docker_build/log/httpd
-    - name: HTTPD_CONF
-      hostPath: 
-        path: ./docker_build/etc/httpd.conf
-    - name: HTTPD-SSL_CONF
-      hostPath: 
-        path: ./docker_build/etc/httpd-ssl.conf
-    - name: MYSQL_CERT_DIR
-      hostPath:
-        path: ./docker_build/certs/mysql
-    - name: PHP_INI
-      hostPath:
-        path: ./docker_build/etc/php.ini
+              subPath: php.ini
+
+      volumes:
+        - name: document-root
+          hostPath:
+            path: /myvol/htdocs
+            type: Directory
+        - name: httpd-cert-dir
+          hostPath:
+            path: /myvol/certs/httpd
+            type: Directory
+        - name: httpd-log
+          hostPath:
+            path: /myvol/log/httpd
+            type: Directory
+        - name: httpd-conf-file
+          configMap:
+            name: httpd-conf
+        - name: httpd-ssl-conf-file
+          configMap: 
+            name: httpd-ssl-conf
+        - name: mysql-cert-dir
+          hostPath:
+            path: /myvol/certs/mysql
+            type: Directory
+        - name: php-ini-file
+          configMap:
+            name: php-ini
