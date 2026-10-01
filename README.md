@@ -138,6 +138,12 @@ ls -l myvol
 kubectl get pvc
 kubectl describe pvc mysql-pvc
 
+#minikube images
+minikube image load lamp-mysql:lts-debian13    #load local image into minikube
+minikube image ls                              #List all images
+minikube image rm <image_name>                 #Delete image
+
+
 #Debug:
 kubectl logs deployment/lamp-frontend
 kubectl logs deployment/lamp-mysql
