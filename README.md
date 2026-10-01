@@ -50,7 +50,6 @@ This will create images:
 minikube start --driver=docker --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/myvol"
 
 #or without mounting option
-#note: Remember to keep the command 'minikube mount' running.
 minikube start --driver=docker
 minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/tmp
 
@@ -60,11 +59,8 @@ Use ConfigMap to access httpd.conf, httpd-ssl.conf and php.ini from your host ma
 
 ```
 kubectl create configmap httpd-conf --from-file=httpd.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd.conf
-
 kubectl create configmap httpd-ssl-conf --from-file=httpd-ssl.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd-ssl.conf
-
 kubectl create configmap php-ini --from-file=php.ini=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/php.ini
-
 kubectl create configmap my-cnf --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
 ```
 
@@ -76,15 +72,14 @@ minikube image load lamp-php:8.5.8-debian13-fpm
 minikube image load lamp-mysql:lts-debian13
 
 #Apply the deployment
-minikube addons enable storage-provisioner
 kubectl apply --validate=true -f k8s_lampstack_deploy.yaml  
 ```
 <br/>
 
-### Access to the LAMP stack webpage:
-Run the following command to forward httpd port 8080 from the Apache pod to your host port 8008
+### Step 3: Access to the LAMP stack webpage:
+Run the following command to forward pod Apache port 8080 to your host port 8008
 ```
-minikube service httpd-service
+minikube service httpd-service --url
 minikube tunnel                                     #For LoadBalancer services
 kubectl port-forward svc/httpd-service 8008:8080    #pod:8080, host:8008
 ```
@@ -120,15 +115,17 @@ kubectl describe pod <pod-name>    # Describe pod
 kubectl describe pods -l app=lamp
 
 minikube service list
-kubectl get svc -A                 #List all services in all namespace. Check Existence & IPs
-kubectl get svc                    #List all services in the current namespace. Check Existence & IPs
-kubectl describe svc               #Describe all services. Check Routing (Endpoints)
-kubectl describe svc service_name  #Describe service name. Check Routing (Endpoints)
-
+kubectl get svc -A                   #List all services in all namespace. Check Existence & IPs
+kubectl get svc                      #List all services in the current namespace. Check Existence & IPs
+kubectl describe svc                 #Describe all services. Check Routing (Endpoints)
+kubectl describe svc s<ervice_name>  #Describe service name. Check Routing (Endpoints)
 minikube service httpd-service
+kubectl get svc <service_name>
 
+#configMaps:
 kubectl get configmaps -A                      #Show all ConfigMaps
 kubectl describe configmaps --all-namespaces   #Describe all ConfigMaps
+kubectl delete configmaps <config-name>
 
 #Verifying the Mount
 minikube ssh
@@ -145,11 +142,18 @@ minikube image rm <image_name>                 #Delete image
 
 
 #Debug:
-kubectl logs deployment/lamp-frontend
-kubectl logs deployment/lamp-mysql
+kubectl logs deployment/lamp-httpd-frontend
+kubectl logs deployment/lamp-php-fpm-frontend
+kubectl logs deployment/lamp-mysql-backend
+
+kubectl logs service/php-fpm-service
+kubectl logs service/httpd-service
+kubectl logs service/mysql-service
+
 kubectl logs lamp-frontend-7bf4f58756-tpsjs -c httpd
 kubectl logs lamp-mysql-backend-5bc9957c6c-pkpqw -c lamp-mysql
 kubectl describe pod lamp-frontend-7bf4f58756-tpsjs
+
 
 #Watch live events
 kubectl get pods -w
