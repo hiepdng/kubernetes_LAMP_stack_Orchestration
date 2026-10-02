@@ -152,8 +152,10 @@ kubectl logs service/php-fpm-service
 kubectl logs service/httpd-service
 kubectl logs service/mysql-service
 
+kubectl get pod
 kubectl logs lamp-frontend-7bf4f58756-tpsjs -c httpd
 kubectl logs lamp-mysql-backend-5bc9957c6c-pkpqw -c lamp-mysql
+kubectl logs lamp-php-fpm-frontend-64ff899c5d-px298 -c php-fpm
 kubectl describe pod lamp-frontend-7bf4f58756-tpsjs
 
 
