@@ -21,6 +21,7 @@ fi
 if [ ! -d "htdocs/uploads" ]; then
     echo "Create htdocs/uploads directory."
     mkdir -p htdocs/uploads
+    chmod 777 htdocs/uploads
 fi
 
 # Create a self-signed SSL Certificate for testing purposes:
