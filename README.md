@@ -6,6 +6,12 @@ To focus on Kubernetes containerization and orchestration, I include a directory
 
 <br/>
 
+---  
+
+# <div align="center">$${\color{blue}Setup \space }$$ 
+
+<br/>
+
 ### Prerequisite:
 The following prerequisites must be available:
 - **Docker Engine:** See [How to install Docker Linux (Ubuntu/RedHat)](https://docs.docker.com/engine/install/) for more information
@@ -86,6 +92,16 @@ minikube service httpd-service --url                #used with nodePort
 minikube tunnel                                     #For LoadBalancer services
 ```
 To access your webpage, goto http://127.0.0.1:8008
+
+<br/>
+<br/>
+
+---  
+
+# <div align="center">$${\color{blue}Manage \space Minikube \space Cluster}$$ 
+
+<br/>
+
 
 <br/>
 
