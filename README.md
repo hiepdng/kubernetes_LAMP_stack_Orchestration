@@ -79,9 +79,11 @@ kubectl apply --validate=true -f k8s_lampstack_deploy.yaml
 ### Step 3: Access to the LAMP stack webpage:
 Run the following command to forward pod Apache port 8080 to your host port 8008
 ```
-minikube service httpd-service --url
-minikube tunnel                                     #For LoadBalancer services
 kubectl port-forward svc/httpd-service 8008:8080    #pod:8080, host:8008
+
+or
+minikube service httpd-service --url                #used with nodePort
+minikube tunnel                                     #For LoadBalancer services
 ```
 To access your webpage, goto http://127.0.0.1:8008
 
@@ -89,6 +91,7 @@ To access your webpage, goto http://127.0.0.1:8008
 
 ### Checking:
 ```
+#Minikube cluster info:
 kubectl get pods -n kube-system #lists all the running and pending pods within the internal kube-system
 minikube status                 #Checks the health of the local subsystem
 minikube ip                     #Show the internal IP address of the Minikube cluster node. 
@@ -96,6 +99,8 @@ minikube profile list           #Shows active profiles and verifies your default
 kubectl config current-context  #Show current Kubernetes cluster name
 kubectl get po -A               #Lists the core system pods running across all namespaces.
 kubectl cluster-info            #Display cluster information
+kubectl get all                 #Show Services, Deployments, ReplicaSets, StatefulSets, DaemonSets, Jobs and CronJobs
+
 
 docker images                   #List all docker images
 docker ps -a                    #Lists running containers on your host machine.
@@ -104,16 +109,20 @@ docker ps -a                    #Lists running containers on your host machine.
 minikube dashboard              #Automatically opens a web-based Kubernetes user interface in your
                                  browser to view your cluster visually. 
 
-
+#Node info:
 kubectl get nodes               #Checks the status of the single node managed by Minikube.
-kubectl get all                 #Show Services, Deployments, ReplicaSets, StatefulSets, DaemonSets, Jobs and CronJobs
+minikube node list
+kubectl describe node minikube
 
+#Pod info:
 kubectl get pods                   #List all pod names, Check pods health
 kubectl get pods --show-labels     #List all pod names with lables
 kubectl describe pods              #Describe all pods
-kubectl describe pod <pod-name>    # Describe pod
-kubectl describe pods -l app=lamp
+kubectl describe pod <pod-name>    #Describe pod
+kubectl describe pods -l app=lamp  #Describe pod, app name
 
+
+#Services:
 minikube service list
 kubectl get svc -A                   #List all services in all namespace. Check Existence & IPs
 kubectl get svc                      #List all services in the current namespace. Check Existence & IPs
@@ -122,6 +131,7 @@ kubectl describe svc s<ervice_name>  #Describe service name. Check Routing (Endp
 minikube service httpd-service
 kubectl get svc <service_name>
 kubectl get endpoints httpd-service   #Get endpoint service
+minikube service <service-name> --url #Get the Connection URL for a Specific Service
 
 
 #configMaps:
