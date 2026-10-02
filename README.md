@@ -9,7 +9,7 @@ To focus on Kubernetes containerization and orchestration, I include a directory
 
 ---  
 
-# <div align="center">$${\color{blue} Setup \space }$$  
+# <div align="center">$${\color{blue} Setting \space up \space }$$  
 
 
 ### Prerequisite:
@@ -98,7 +98,7 @@ To access your webpage, goto http://127.0.0.1:8008
 
 ---  
 
-# <div align="center">$${\color{blue}Manage \space Minikube \space Cluster}$$ 
+# <div align="center">$${\color{blue}Managing \space Minikube \space Cluster}$$ 
 - Basic Lifecycle Commands:
 ```
 minikube start      #Start the cluster: Downloads images and boots the single-node environment
