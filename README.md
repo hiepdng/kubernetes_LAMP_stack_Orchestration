@@ -101,7 +101,6 @@ kubectl get po -A               #Lists the core system pods running across all n
 kubectl cluster-info            #Display cluster information
 kubectl get all                 #Show Services, Deployments, ReplicaSets, StatefulSets, DaemonSets, Jobs and CronJobs
 
-
 docker images                   #List all docker images
 docker ps -a                    #Lists running containers on your host machine.
                                  (eg. gcr.io/k8s-minikube/kicbase)
@@ -113,6 +112,7 @@ minikube dashboard              #Automatically opens a web-based Kubernetes user
 kubectl get nodes               #Checks the status of the single node managed by Minikube.
 minikube node list
 kubectl describe node minikube
+
 
 #Pod info:
 kubectl get pods                   #List all pod names, Check pods health
@@ -139,13 +139,16 @@ kubectl get configmaps -A                      #Show all ConfigMaps
 kubectl describe configmaps --all-namespaces   #Describe all ConfigMaps
 kubectl delete configmaps <config-name>
 
+
 #Verifying the Mount
 minikube ssh
 ls -l myvol
 
+
 #Volume:
 kubectl get pvc
 kubectl describe pvc mysql-pvc
+
 
 #minikube images
 minikube image load lamp-mysql:lts-debian13    #load local image into minikube
@@ -183,10 +186,14 @@ kubectl scale deployment lamp-mysql --replicas=0    #stop lamp-mysql app
 ### Kubernetes Clean up:
 - Clean Up All Workloads Across All Namespaces:
 ```
+kubectl get all                           #List pods, services, deployment, replica...
+
 kubectl delete all --all --all-namespaces
 kubectl delete  all --all --all-namespaces --interactive=false
 
 kubectl delete deployment lamp-mysql-backend
+kubectl delete pod lamp-mysql-backend-bb755b998-6tclg
+kubectl delete service mysql-service
 kubectl delete pvc mysql-pvc
 ```
 - Reset Bare-Metal/Kubeadm Nodes:
