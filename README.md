@@ -5,12 +5,12 @@
 To focus on Kubernetes containerization and orchestration, I include a directory [docker_build](https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_depoyment/tree/main/docker_build), which is a pre-configured LAMP stack IaC from my other project [docker_build_DHI_LAMP_Project](https://github.com/hiepdng/docker_build_DHI_LAMP_Project). All you need to do is to use these code to build the LAMP stack images, then use Kubernetes to containerize and orchestrate the LAMP stack.  
 
 <br/>
+<br/>
 
 ---  
 
-# <div align="center">$${\color{blue}Setup \space }$$ 
+# <div align="center">$${\color{blue} Setup \space }$$  
 
-<br/>
 
 ### Prerequisite:
 The following prerequisites must be available:
@@ -99,6 +99,24 @@ To access your webpage, goto http://127.0.0.1:8008
 ---  
 
 # <div align="center">$${\color{blue}Manage \space Minikube \space Cluster}$$ 
+- Basic Lifecycle Commands:
+```
+minikube start      #Start the cluster: Downloads images and boots the single-node environment
+minikube status     #Check status: Shows the health of the host, kubelet, and API server
+minikube stop       #Stop the cluster: Gracefully shuts down the underlying VM or container
+minikube pause      #Pause Kubernetes: Temporarily freezes execution to save CPU
+         unpause
+minikube delete     #Delete the cluster: Wipes out the cluster instance and frees disk space
+```
+
+- Advanced Cluster Management:
+```
+minikube node add                    #Add a worker node
+minikube node add --control-plane    #Add a control plane for high availability
+
+
+```
+
 
 <br/>
 
@@ -211,6 +229,8 @@ kubectl delete deployment lamp-mysql-backend
 kubectl delete pod lamp-mysql-backend-bb755b998-6tclg
 kubectl delete service mysql-service
 kubectl delete pvc mysql-pvc
+
+minikube delete    #Delete the cluster: Wipes out the cluster instance and frees disk space
 ```
 - Reset Bare-Metal/Kubeadm Nodes:
 ```
