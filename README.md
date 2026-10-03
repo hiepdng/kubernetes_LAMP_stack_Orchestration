@@ -57,7 +57,7 @@ minikube start --driver=docker --mount --mount-string="/home/temp/kubernetes_git
 
 #or without mounting option
 minikube start --driver=docker
-minikube mount /home/temp/kubernetes_github_action_LAMP_stack_depoyment/docker_build:/tmp
+minikube mount /home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/tmp
 
 ```
 - **Share external config file using ConfigMap:**  
@@ -99,7 +99,7 @@ To access your webpage, goto http://127.0.0.1:8008
 ---  
 
 # <div align="center">$${\color{blue}Managing \space Minikube \space Cluster}$$ 
-- Basic Lifecycle Commands:
+### Basic Lifecycle Commands:
 ```
 minikube start      #Start the cluster: Downloads images and boots the single-node environment
 minikube status     #Check status: Shows the health of the host, kubelet, and API server
@@ -109,42 +109,48 @@ minikube pause      #Pause Kubernetes: Temporarily freezes execution to save CPU
 minikube delete     #Delete the cluster: Wipes out the cluster instance and frees disk space
 ```
 
-- Advanced Cluster Management:
-   * Set resource usage when starting a cluster:  
-   ```
-   minikube start --cpus=4 --memory=8192mb --disk-size=50g  #for a single section
+### Advanced Cluster Management:  
+- Set resource usage when starting a cluster:  
+```
+minikube stop
+minikube start --cpus=4 --memory=8192mb --disk-size=50g  #for a single section
 
-   #or 
-   minikube config set cpus 4                               #To permanently set a default limit
-   minikube config set memory 8192
+#or
+minikube stop
+minikube config set cpus 4                               #To permanently set a default limit
+minikube config set memory 8192
+minikube start
 
-   #Checking:
-   cat ~/.minikube/config/config.json
-   ```
+#Checking:
+cat ~/.minikube/config/config.json
+minikube config view
+kubectl describe node minikube
+```
 
-   * Manually scale up/down infrastructure:
-   ```
-   #Scale up:
-   kubectl get nodes                    #List all node names
-   minikube node add                    #Add a worker node
-   minikube node add --control-plane    #Add a control plane for high availability
+- Manually scale up/down infrastructure:
+```
+#Scale up:
+kubectl get nodes                    #List all node names
+minikube node add                    #Add a worker node
+minikube node add --control-plane    #Add a control plane for high availability
 
-   #Scale dowon:
-   kubectl drain <node-name> --ignore-daemonsets
-   minikube node delete <node-name>
-   ```
+#Scale dowon:
+kubectl drain <node-name> --ignore-daemonsets
+minikube node delete <node-name>
+```
 
-   * Manually scale up/down deployments (application workloads):
-   ```
-   kubectl get deployment                                                     #list all deployment names
-   kubectl scale deployment/<deployment-name> --replicas=<number-of-pods>     #increase number of instances
-   kubectl scale deployment/lamp-httpd-frontend --replicas=3
-   kubectl scale deployment/lamp-php-fpm-frontend--replicas=3
-   kubectl scale deployment/lamp-mysql-backend --replicas=2
-   kubectl get pods                                                            #checking number of pods
+- Manually scale up/down deployments (application workloads):
+```
+kubectl get deployment                                                     #list all deployment names
+kubectl scale deployment/<deployment-name> --replicas=<number-of-pods>     #increase number of instances
+kubectl scale deployment/lamp-httpd-frontend --replicas=3
+kubectl scale deployment/lamp-php-fpm-frontend--replicas=3
+kubectl scale deployment/lamp-mysql-backend --replicas=2
+kubectl get pods                                                            #checking number of pods
 
 
-   ```
+```
+
 
 
 <br/>
@@ -260,6 +266,11 @@ kubectl delete service mysql-service
 kubectl delete pvc mysql-pvc
 
 minikube delete    #Delete the cluster: Wipes out the cluster instance and frees disk space
+
+minikube delete --all --purge
+#Note:.`minikube delete`**: Shuts down and deletes the local Kubernetes cluster, removing the VM or container.
+      .`--all`**: Deletes all minikube profiles (clusters) you have created, not just the default one.
+      .`--purge`**: Removes the `.minikube` directory from your user path, wiping out cached images, certificates, and leftover global configurations.
 ```
 - Reset Bare-Metal/Kubeadm Nodes:
 ```
