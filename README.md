@@ -110,7 +110,7 @@ minikube delete     #Delete the cluster: Wipes out the cluster instance and free
 ```
 
 ### Advanced Cluster Management:  
-- Set resource usage when starting a cluster:  
+- Set resource usage when starting a cluster: 
 ```
 minikube stop
 minikube start --cpus=4 --memory=8192mb --disk-size=50g  #for a single section
@@ -134,7 +134,7 @@ kubectl get nodes                    #List all node names
 minikube node add                    #Add a worker node
 minikube node add --control-plane    #Add a control plane for high availability
 
-#Scale dowon:
+#Scale down:
 kubectl drain <node-name> --ignore-daemonsets
 minikube node delete <node-name>
 ```
@@ -147,10 +147,18 @@ kubectl scale deployment/lamp-httpd-frontend --replicas=3
 kubectl scale deployment/lamp-php-fpm-frontend--replicas=3
 kubectl scale deployment/lamp-mysql-backend --replicas=2
 kubectl get pods                                                            #checking number of pods
-
-
 ```
 
+- Manage resources: CPUs, Memory, Disk
+```
+kubectl get deployment         #list all deployment names
+kubectl get pods               ##list all pod names
+
+kubectl set resources deployment <deployment-name> --requests=cpu=200m,memory=512Mi
+#or
+kubectl patch pod <pod-name> --subresource=resize --type=json -p='[{"op": "replace", "path": "/spec/containers/0/resources/requests", "value": {"cpu": "200m", "memory": "512Mi"}}]'
+
+```
 
 
 <br/>
