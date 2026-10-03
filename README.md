@@ -113,6 +113,15 @@ minikube delete     #Delete the cluster: Wipes out the cluster instance and free
 ```
 minikube node add                    #Add a worker node
 minikube node add --control-plane    #Add a control plane for high availability
+```
+
+```
+#Manually scaleup:
+kubectl get deployment                                      #list all deployments
+kubectl scale deployment/<deployment-name> --replicas=3     #increase number of instances to 3
+kubectl scale deployment/lamp-httpd-frontend --replicas=3
+kubectl scale deployment/lamp-php-fpm-frontend--replicas=3
+kubectl scale deployment/lamp-mysql-backend --replicas=2
 
 
 ```
