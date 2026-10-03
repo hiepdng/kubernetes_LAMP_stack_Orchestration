@@ -110,8 +110,8 @@ minikube delete     #Delete the cluster: Wipes out the cluster instance and free
 ```
 
 - Advanced Cluster Management:
+  - Set resource usage when starting a cluster:  
 ```
-#Set resource usage when starting a cluster:
 minikube start --cpus=4 --memory=8192mb --disk-size=50g  #for a single section
 
 #or 
@@ -122,20 +122,20 @@ minikube config set memory 8192
 cat ~/.minikube/config/config.json
 ```
 
-
+  - Manually scale up/down infrastructure:  
 ```
-#Manually scale up infrastructure:
+#Scale up:
 kubectl get nodes                    #List all node names
 minikube node add                    #Add a worker node
 minikube node add --control-plane    #Add a control plane for high availability
 
-#Manually scale up infrastructure:
+#Scale dowon:
 kubectl drain <node-name> --ignore-daemonsets
 minikube node delete <node-name>
 ```
 
+  - Manually scale up/down deployments (application workloads):
 ```
-#Manually scale up deployments (application workloads):
 kubectl get deployment                                                     #list all deployment names
 kubectl scale deployment/<deployment-name> --replicas=<number-of-pods>     #increase number of instances
 kubectl scale deployment/lamp-httpd-frontend --replicas=3
