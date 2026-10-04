@@ -154,10 +154,17 @@ kubectl get pods                                                            #che
 kubectl get deployment         #list all deployment names
 kubectl get pods               #list all pod names
 
+#Setting:
 kubectl set resources deployment <deployment-name> --requests=cpu=200m,memory=512Mi --limits=cpu=500m,memory=1Gi
 #or
-kubectl patch deployment my-deployment --type=strategic \
+kubectl patch deployment <deployment-name> --type=strategic \
   -p '{"spec":{"template":{"spec":{"containers":[{"name":"*","resources":{"requests":{"cpu":"200m","memory":"512Mi"},"limits":{"cpu":"500m","memory":"1Gi"}}}]}}}}'
+
+#Unsetting:
+kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "path": "/spec/template/spec/containers/0/resources/requests/cpu"}]'
+kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "path": "/spec/template/spec/containers/0/resources/requests/memory"}]'
+kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "path": "/spec/template/spec/containers/0/resources/limits/cpu"}]'
+kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "path": "/spec/template/spec/containers/0/resources/limits/memory"}]'
 
 #Checking:
 kubectl describe deployment <deployment-name>
