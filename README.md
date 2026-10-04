@@ -166,7 +166,7 @@ kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "pa
 kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "path": "/spec/template/spec/containers/0/resources/limits/cpu"}]'
 kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "path": "/spec/template/spec/containers/0/resources/limits/memory"}]'
 
-#Checking:
+#Verifying:
 kubectl describe deployment <deployment-name>
 ```
 
