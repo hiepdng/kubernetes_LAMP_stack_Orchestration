@@ -170,8 +170,45 @@ kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "pa
 #Verifying:
 kubectl describe deployment <deployment-name>
 ```
+- Horizontal Pod Autoscaling:  
+A HorizontalPodAutoscaler (HPA) automatically updates workload resources like Deployments to adjust capacity based on demand. With horizontal scaling, the HPA automatically adds pods when demand goes up and removes them when demand drops. The following are steps to enable HPA:
 
+  - Step 1: Enable Metrics Server
+   ```
+   minikube addons enable metrics-server         #enable metrics-server
+   kubectl get apiservices                       #check v1beta1.metrics.k8s.io service is available
+   minikube addons list                          #check if the metrics-server addon is enable
+   ```
+  - Step 2: Create a Deployment with Resource Requests  
+    Your pods must define CPU or memory requests so the HPA knows when to scale. The below is the example of the httpd deployment:  
+    ```yaml
+    k8s_lampstack_deploy.yaml
+    
+      containers:
+        - name: httpd
+          image: lamp-httpd:2.4.68-debian13
+          imagePullPolicy: Never
+          resources:
+            requests: "50m"
+    ```
+    Where:  
+     &emsp;&emsp; • 1000m = 1 full CPU core  
+     &emsp;&emsp; • 500m = 0.5 (half) of a CPU core  
+     &emsp;&emsp; • 100m = 0.1 of a CPU core  
+     &emsp;&emsp; • 50m = 0.05 of a CPU core
+    
+    Apply the deployment
+    ```bash
+    kubectl apply --validate=true -f k8s_lampstack_deploy.yaml 
+    ```
+    
+  - Step 3: Configure Automatic Scaling (HPA)
+    Use kubectl autoscale to automatically adjust the number of pods based on resource utilization. Run the autoscale command:  
+    ```
+    kubectl autoscale deployment lamp-httpd-frontend --cpu=50% --min=1 --max=5
 
+    ```
+    
 <br/>
 
 
