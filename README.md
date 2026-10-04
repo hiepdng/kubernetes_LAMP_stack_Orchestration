@@ -149,15 +149,18 @@ kubectl scale deployment/lamp-mysql-backend --replicas=2
 kubectl get pods                                                            #checking number of pods
 ```
 
-- Manage resources: CPUs, Memory, Disk
+- Manage resources: CPUs, Memory
 ```
 kubectl get deployment         #list all deployment names
-kubectl get pods               ##list all pod names
+kubectl get pods               #list all pod names
 
-kubectl set resources deployment <deployment-name> --requests=cpu=200m,memory=512Mi
+kubectl set resources deployment <deployment-name> --requests=cpu=200m,memory=512Mi --limits=cpu=500m,memory=1Gi
 #or
-kubectl patch pod <pod-name> --subresource=resize --type=json -p='[{"op": "replace", "path": "/spec/containers/0/resources/requests", "value": {"cpu": "200m", "memory": "512Mi"}}]'
+kubectl patch deployment my-deployment --type=strategic \
+  -p '{"spec":{"template":{"spec":{"containers":[{"name":"*","resources":{"requests":{"cpu":"200m","memory":"512Mi"},"limits":{"cpu":"500m","memory":"1Gi"}}}]}}}}'
 
+#Checking:
+kubectl describe deployment <deployment-name>
 ```
 
 
