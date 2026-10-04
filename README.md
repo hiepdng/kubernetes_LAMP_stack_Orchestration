@@ -110,7 +110,7 @@ minikube delete     #Delete the cluster: Wipes out the cluster instance and free
 ```
 
 ### Advanced Cluster Management:  
-- Set resource usage when starting a cluster: 
+- Set resource usage for a node when starting a cluster: 
 ```
 minikube stop
 minikube start --cpus=4 --memory=8192mb --disk-size=50g  #for a single section
@@ -149,7 +149,8 @@ kubectl scale deployment/lamp-mysql-backend --replicas=2
 kubectl get pods                                                            #checking number of pods
 ```
 
-- Manage resources: CPUs, Memory
+- Manage resources: CPUs, Memory  
+  By default, Kubernetes does not enforce resource requests or limits on deployments or their pods. This means a standard deployment can technically consume as much CPU and memory as the underlying minikube cluster provides before getting throttled or crashing. To prevent resource competition among pods, you can set maximum resource usage for each pod or deployment.
 ```
 kubectl get deployment         #list all deployment names
 kubectl get pods               #list all pod names
