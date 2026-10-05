@@ -185,7 +185,7 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
    minikube addons list                                   #check if the metrics-server addon is enable
    ```
   - Step 2: Create a Deployment with Resource Requests  
-    Your pods must define CPU or memory requests so the HPA knows when to scale. The below is the example of the httpd deployment:  
+    Your pods must define CPU or memory requests so the HPA knows when to scale. The below example is the modification of the httpd deployment:  
     ```yaml
     k8s_lampstack_deploy.yaml
     
@@ -206,7 +206,24 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
      &emsp;&emsp; • 500m = 0.5 (half) of a CPU core  
      &emsp;&emsp; • 100m = 0.1 of a CPU core  
      &emsp;&emsp; • 50m = 0.05 of a CPU core
+    
+    Apply the deployment
+    ```bash
+    kubectl apply --validate=true -f k8s_lampstack_deploy.yaml
+    kubectl apply --validate=true -f hpa.yaml:w
 
+    kubectl get all                     #verifying horizontalpodautoscaler
+    ```
+    
+  - Step 3: Configure Automatic Scaling (HPA)  
+    You can automatically scale number of pods based on resource utilization.  
+    Using command line:  
+    ```
+    kubectl autoscale deployment lamp-httpd-frontend --cpu=60% --memory=70% --min=1 --max=5
+
+    kubectl get hpa       #checking horizontalpodautoscaler
+    ```
+    or using manifest file:
      ```yaml
      hpa.yaml
 
@@ -235,23 +252,6 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
              type: Utilization
              averageUtilization: 70
      ```
-        
-    
-    Apply the deployment
-    ```bash
-    kubectl apply --validate=true -f k8s_lampstack_deploy.yaml
-    kubectl apply --validate=true -f hpa.yaml:w
-
-    kubectl get all                     #verifying horizontalpodautoscaler
-    ```
-    
-  - Step 3: Configure Automatic Scaling (HPA)
-    Use kubectl autoscale to automatically adjust the number of pods based on resource utilization. Run the autoscale command:  
-    ```
-    kubectl autoscale deployment lamp-httpd-frontend --cpu=50% --min=1 --max=5
-
-    kubectl get hpa       #
-    ```
     
 <br/>
 
