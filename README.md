@@ -174,8 +174,13 @@ kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "pa
 #Verifying:
 kubectl describe deployment <deployment-name>
 ```
+
 - Horizontal Pod Autoscaling:  
-A HorizontalPodAutoscaler (HPA) automatically updates workload resources like Deployments to adjust capacity based on demand. With horizontal scaling, the HPA automatically adds pods when demand goes up and removes them when demand drops. The following are steps to enable HPA:
+  A HorizontalPodAutoscaler (HPA) automatically updates workload resources like Deployments to adjust capacity based on demand. With horizontal scaling, the HPA automatically adds pods when demand goes up and removes them when demand drops.
+
+  You can automatically scale the number of pods based on resource utilization. Below is an example of autoscaling pods for the httpd deployment. You can configure the same for mysql and php.
+
+  The following are steps to enable HPA:
 
   - Step 1: Enable Metrics Server
    ```
@@ -210,19 +215,17 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
     Apply the deployment
     ```bash
     kubectl apply --validate=true -f k8s_lampstack_deploy.yaml
-    kubectl apply --validate=true -f hpa.yaml:w
-
-    kubectl get all                     #verifying horizontalpodautoscaler
     ```
     
   - Step 3: Configure Automatic Scaling (HPA)  
-    You can automatically scale number of pods based on resource utilization.  
+    There are two main methods of horizontal autoscaling:
+    
     • <ins>Using command line</ins>:  
     ```
     kubectl autoscale deployment lamp-httpd-frontend --cpu=60% --memory=70% --min=1 --max=5
     ```
     or  
-    • <ins>Using manifest file</ins>:
+    • <ins>Using a manifest file</ins>:
      ```yaml
      hpa.yaml
 
@@ -256,6 +259,14 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
     kubectl apply --validate=true -f hpa.yaml
 
     kubectl get all                     #verifying horizontalpodautoscaler
+    ```
+    - Step 4: Verifying
+    ```
+    kubectl get all                                #display basic, workload-related resources
+    kubectl get hpa                                #check HPA Status
+    kubectl describe hpa lamp-httpd-frontend       #inspect Detailed Conditions
+    kubectl get apiservice v1beta1.metrics.k8s.io  #verify Metrics Server
+    kubectl top pods                               #show resource usage
     ```
     
 <br/>
