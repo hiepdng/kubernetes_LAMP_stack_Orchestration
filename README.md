@@ -257,8 +257,6 @@ kubectl describe deployment <deployment-name>
     Apply the HorizontalPodAutoscaler
     ```bash
     kubectl apply --validate=true -f hpa.yaml
-
-    kubectl get all                     #verifying horizontalpodautoscaler
     ```
     - Step 4: Verifying
     ```
@@ -361,6 +359,7 @@ kubectl describe pod lamp-frontend-7bf4f58756-tpsjs
 kubectl get pods -w
 kubectl get events -w
 kubectl events -w --all-namespaces
+watch kubectl top pods
 
 
 
