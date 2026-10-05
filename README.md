@@ -178,7 +178,7 @@ kubectl describe deployment <deployment-name>
 - Horizontal Pod Autoscaling:  
   A HorizontalPodAutoscaler (HPA) automatically updates workload resources like Deployments to adjust capacity based on demand. With horizontal scaling, the HPA automatically adds pods when demand goes up and removes them when demand drops.
 
-  You can automatically scale the number of pods based on resource utilization. Below is an example of autoscaling pods for the httpd deployment. You can configure the same for mysql and php.
+  Below is an example of auto-scaling pods for the httpd, php-fpm  and mysql deployments. You can configure auto-scaling for httpd and php-fpm or mysql deployment alone.
 
   The following are steps to enable HPA:
 
@@ -190,7 +190,7 @@ kubectl describe deployment <deployment-name>
    minikube addons list                                   #check if the metrics-server addon is enable
    ```
   - Step 2: Create a Deployment with Resource Requests  
-    Your pods must define CPU or memory requests so the HPA knows when to scale. The below example is the modification of the httpd deployment:  
+    Your pods must define CPU or memory requests so the HPA knows when to scale. The below are examples of the httpd, php-fpm and mysql deployments that define request resources:  
     ```yaml
     k8s_lampstack_deploy.yaml
 
@@ -247,7 +247,9 @@ kubectl describe deployment <deployment-name>
     
     • <ins>Using command line</ins>:  
     ```
-    kubectl autoscale deployment lamp-httpd-frontend --cpu=60% --memory=70% --min=1 --max=5
+    kubectl autoscale deployment lamp-httpd-frontend --cpu=50% --memory=50% --min=1 --max=5
+    kubectl autoscale deployment lamp-php-fpm-frontend --cpu=50% --memory=50% --min=1 --max=5
+    kubectl autoscale deployment lamp-mysql-backend --cpu=50% --memory=50% --min=1 --max=5
     ```
     or  
     • <ins>Using a manifest file</ins>:
@@ -272,13 +274,13 @@ kubectl describe deployment <deployment-name>
            name: cpu
            target:
              type: Utilization
-             averageUtilization: 60
+             averageUtilization: 50
        - type: Resource
          resource:
            name: memory
            target:
              type: Utilization
-             averageUtilization: 70
+             averageUtilization: 50
 
      ---
      apiVersion: autoscaling/v2
@@ -298,13 +300,13 @@ kubectl describe deployment <deployment-name>
            name: cpu
            target:
              type: Utilization
-             averageUtilization: 60
+             averageUtilization: 50
        - type: Resource
          resource:
            name: memory
            target:
              type: Utilization
-             averageUtilization: 70
+             averageUtilization: 50
      
      ---
      apiVersion: autoscaling/v2
@@ -324,13 +326,13 @@ kubectl describe deployment <deployment-name>
            name: cpu
            target:
              type: Utilization
-             averageUtilization: 60
+             averageUtilization: 50
        - type: Resource
          resource:
            name: memory
            target:
              type: Utilization
-             averageUtilization: 70
+             averageUtilization: 50
      ```
     Apply the HorizontalPodAutoscaler
     ```bash
