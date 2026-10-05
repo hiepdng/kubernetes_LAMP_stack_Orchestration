@@ -217,13 +217,12 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
     
   - Step 3: Configure Automatic Scaling (HPA)  
     You can automatically scale number of pods based on resource utilization.  
-    Using command line:  
+    • <ins>Using command line</ins>:  
     ```
     kubectl autoscale deployment lamp-httpd-frontend --cpu=60% --memory=70% --min=1 --max=5
-
-    kubectl get hpa       #checking horizontalpodautoscaler
     ```
-    or using manifest file:
+    or  
+    • <ins>Using manifest file</ins>:
      ```yaml
      hpa.yaml
 
@@ -252,6 +251,12 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
              type: Utilization
              averageUtilization: 70
      ```
+    Apply the HorizontalPodAutoscaler
+    ```bash
+    kubectl apply --validate=true -f hpa.yaml
+
+    kubectl get all                     #verifying horizontalpodautoscaler
+    ```
     
 <br/>
 
