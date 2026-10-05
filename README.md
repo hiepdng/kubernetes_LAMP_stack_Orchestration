@@ -193,10 +193,35 @@ kubectl describe deployment <deployment-name>
     Your pods must define CPU or memory requests so the HPA knows when to scale. The below example is the modification of the httpd deployment:  
     ```yaml
     k8s_lampstack_deploy.yaml
-    
+
+    ...
       containers:
         - name: httpd
           image: lamp-httpd:2.4.68-debian13
+          imagePullPolicy: Never
+          resources:
+            requests:
+                cpu: "100m"
+                memory: "128Mi"
+            limits:
+                cpu: "200m"
+                memory: "256Mi"
+    ...
+      containers:
+        - name: php-fpm
+          image: amp-php:8.5.8-debian13-fpm
+          imagePullPolicy: Never
+          resources:
+            requests:
+                cpu: "100m"
+                memory: "128Mi"
+            limits:
+                cpu: "200m"
+                memory: "256Mi"
+    ...
+      containers:
+        - name: mysql
+          image: lamp-mysql:lts-debian13
           imagePullPolicy: Never
           resources:
             requests:
@@ -228,7 +253,8 @@ kubectl describe deployment <deployment-name>
     • <ins>Using a manifest file</ins>:
      ```yaml
      hpa.yaml
-
+     
+     ---
      apiVersion: autoscaling/v2
      kind: HorizontalPodAutoscaler
      metadata:
@@ -253,6 +279,58 @@ kubectl describe deployment <deployment-name>
            target:
              type: Utilization
              averageUtilization: 70
+
+     ---
+     apiVersion: autoscaling/v2
+     kind: HorizontalPodAutoscaler
+     metadata:
+       name: lamp-php-fpm-frontend
+     spec:
+       scaleTargetRef:
+         apiVersion: apps/v1
+         kind: Deployment
+         name: lamp-php-fpm-frontend
+       minReplicas: 1
+       maxReplicas: 5
+       metrics:
+       - type: Resource
+         resource:
+           name: cpu
+           target:
+             type: Utilization
+             averageUtilization: 60
+       - type: Resource
+         resource:
+           name: memory
+           target:
+             type: Utilization
+             averageUtilization: 70
+     
+     ---
+     apiVersion: autoscaling/v2
+     kind: HorizontalPodAutoscaler
+     metadata:
+       name: lamp-mysql-backend
+     spec:
+       scaleTargetRef:
+         apiVersion: apps/v1
+         kind: Deployment
+         name: lamp-mysql-backend
+       minReplicas: 1
+       maxReplicas: 5
+       metrics:
+       - type: Resource
+         resource:
+           name: cpu
+           target:
+             type: Utilization
+             averageUtilization: 60
+       - type: Resource
+         resource:
+           name: memory
+           target:
+             type: Utilization
+             averageUtilization: 70
      ```
     Apply the HorizontalPodAutoscaler
     ```bash
@@ -260,11 +338,13 @@ kubectl describe deployment <deployment-name>
     ```
     - Step 4: Verifying
     ```
-    kubectl get all                                #display basic, workload-related resources
-    kubectl get hpa                                #check HPA Status
-    kubectl describe hpa lamp-httpd-frontend       #inspect Detailed Conditions
-    kubectl get apiservice v1beta1.metrics.k8s.io  #verify Metrics Server
-    kubectl top pods                               #show resource usage
+    kubectl get all -A                                         #display basic, workload-related resources
+    kubectl get hpa                                            #check HPA Status
+    kubectl describe hpa lamp-httpd-frontend                   #inspect Detailed Conditions
+    kubectl get apiservice v1beta1.metrics.k8s.io              #verify vetrics-server availability
+    kubectl get pods -n kube-system -l k8s-app=metrics-server  #verify if metrics-server is running
+    kubectl top pods                                           #show resource usage
+    kubectl logs -n kube-system deployment/metrics-server      #show metrics-server log
     ```
     
 <br/>
