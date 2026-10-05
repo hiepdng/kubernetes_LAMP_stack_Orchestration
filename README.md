@@ -2,7 +2,7 @@
 
 <br/>
 
-To focus on Kubernetes containerization and orchestration, I include a directory [docker_build](https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_depoyment/tree/main/docker_build), which is a pre-configured LAMP stack IaC from my other project [docker_build_DHI_LAMP_Project](https://github.com/hiepdng/docker_build_DHI_LAMP_Project). All you need to do is to use these code to build the LAMP stack images, then use Kubernetes to containerize and orchestrate the LAMP stack.  
+To focus on Kubernetes containerization and orchestration, I include a directory [docker_build](https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_deployment/tree/main/docker_build), which is a pre-configured LAMP stack IaC from my other project [docker_build_DHI_LAMP_Project](https://github.com/hiepdng/docker_build_DHI_LAMP_Project). All you need to do is to use these code to build the LAMP stack images, then use Kubernetes to containerize and orchestrate the LAMP stack.  
 
 <br/>
 <br/>
@@ -25,7 +25,7 @@ On a Linux machine, run the following commands to build LAMP stack images:
 
 - **Download the repository**
 ```
-git clone https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_depoyment.git
+git clone https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_deployment.git
 ```
 - **Login to dockerhub from your terminal**
 ```
@@ -34,7 +34,7 @@ docker login dhi.io
 - **Configure/setup environment**  
   This will set up directories, create certificates and modify configuration files 
 ```
-cd kubernetes_github_action_LAMP_stack_depoyment/docker_build
+cd kubernetes_github_action_LAMP_stack_deployment/docker_build
 sh setup.sh
 ```
 - **Build httpd, mysql, php-fpm images**  
