@@ -68,6 +68,8 @@ kubectl create configmap httpd-conf --from-file=httpd.conf=/home/temp/kubernetes
 kubectl create configmap httpd-ssl-conf --from-file=httpd-ssl.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd-ssl.conf
 kubectl create configmap php-ini --from-file=php.ini=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/php.ini
 kubectl create configmap my-cnf --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
+
+kubectl get configmaps -A    #list all configmaps
 ```
 
 - **Apply the deployment:**
@@ -76,6 +78,8 @@ kubectl create configmap my-cnf --from-file=my.cnf=/home/temp/kubernetes_github_
 minikube image load lamp-httpd:2.4.68-debian13
 minikube image load lamp-php:8.5.8-debian13-fpm
 minikube image load lamp-mysql:lts-debian13
+
+minikube image list           #list all images
 
 #Apply the deployment
 kubectl apply --validate=true -f k8s_lampstack_deploy.yaml  
@@ -175,9 +179,10 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
 
   - Step 1: Enable Metrics Server
    ```
-   minikube addons enable metrics-server         #enable metrics-server
-   kubectl get apiservices                       #check v1beta1.metrics.k8s.io service is available
-   minikube addons list                          #check if the metrics-server addon is enable
+   minikube addons enable metrics-server                  #enable metrics-server
+   kubectl get apiservices                                #check v1beta1.metrics.k8s.io service is available
+   kubectl get pods -n kube-system | grep metrics-server  #check if metrics-server is running 
+   minikube addons list                                   #check if the metrics-server addon is enable
    ```
   - Step 2: Create a Deployment with Resource Requests  
     Your pods must define CPU or memory requests so the HPA knows when to scale. The below is the example of the httpd deployment:  
@@ -189,17 +194,49 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
           image: lamp-httpd:2.4.68-debian13
           imagePullPolicy: Never
           resources:
-            requests: "50m"
+            requests:
+                cpu: "100m"
+                memory: "128Mi"
+            limits:
+                cpu: "200m"
+                memory: "256Mi"
     ```
     Where:  
      &emsp;&emsp; • 1000m = 1 full CPU core  
      &emsp;&emsp; • 500m = 0.5 (half) of a CPU core  
      &emsp;&emsp; • 100m = 0.1 of a CPU core  
      &emsp;&emsp; • 50m = 0.05 of a CPU core
+
+     ```yaml
+     hpa.yaml
+
+     apiVersion: autoscaling/v2
+     kind: HorizontalPodAutoscaler
+     metadata:
+       name: lamp-hpa
+     spec:
+       scaleTargetRef:
+         apiVersion: apps/v1
+         kind: Deployment
+         name: my-app
+       minReplicas: 2
+       maxReplicas: 5
+       metrics:
+       - type: Resource
+         resource:
+           name: cpu
+           target:
+             type: Utilization
+             averageUtilization: 50
+     ```
+        
     
     Apply the deployment
     ```bash
-    kubectl apply --validate=true -f k8s_lampstack_deploy.yaml 
+    kubectl apply --validate=true -f k8s_lampstack_deploy.yaml
+    kubectl apply --validate=true -f hpa.yaml:w
+
+    kubectl get all                     #verifying horizontalpodautoscaler
     ```
     
   - Step 3: Configure Automatic Scaling (HPA)
@@ -207,6 +244,7 @@ A HorizontalPodAutoscaler (HPA) automatically updates workload resources like De
     ```
     kubectl autoscale deployment lamp-httpd-frontend --cpu=50% --min=1 --max=5
 
+    kubectl get hpa       #
     ```
     
 <br/>
@@ -292,7 +330,7 @@ kubectl logs service/mysql-service
 
 kubectl get pod
 kubectl logs lamp-frontend-7bf4f58756-tpsjs -c httpd
-kubectl logs lamp-mysql-backend-5bc9957c6c-pkpqw -c lamp-mysql
+kubectl logs lamp-mysql-backend-5bc9957c6c-pkpqw -c mysql
 kubectl logs lamp-php-fpm-frontend-64ff899c5d-px298 -c php-fpm
 kubectl describe pod lamp-frontend-7bf4f58756-tpsjs
 
