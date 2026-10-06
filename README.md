@@ -357,7 +357,61 @@ kubectl describe deployment <deployment-name>
     ```
 <br/>
 
-- <ins>Load Balancer</ins>:
+- <ins>Load Balancer</ins>:  
+  In Minikube, the purpose of a LoadBalancer service type is to simulate a cloud-provider load balancer so you can expose your local Kubernetes applications externally and distribute incoming traffic across multiple pods.
+
+  - Expose the deployment lamp-httpd-frontend using type LoadBalancer.
+    - Using command line:
+    ```
+    kubectl expose deployment <deployment-name> --type="LoadBalancer"
+    kubectl expose deployment lamp-httpd-frontend --type="LoadBalancer"
+    ```
+    or
+    - Using manifest file:
+    ```yaml
+    k8s_loadbalance_service.yaml
+    
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: lamp-httpd-frontend     #deployment name
+      labels:
+        app: lamp
+      namespace: default
+    spec:
+      type: LoadBalancer
+      ports:
+        - name: http
+          port: 8080
+          targetPort: 8080
+        - name: https
+          port: 443
+          targetPort: 443
+      selector:
+        app: lamp
+        tier: frontend
+    ```
+    ```
+    kubectl apply --validate=true -f k8s_loadbalance_service.yaml
+    ```
+   - Run the Tunnel:  
+     Running `minikube tunnel` creates a network route from your host operating system directly to the cluster's LoadBalancer service IP.
+     ```
+     minikube tunnel
+     ```
+   - Auto-Opens a Browser Window:
+     Run the command below to auto open a web browser that access your application deployment
+     ```
+     minikube service <service-name>
+     minikube service lamp-httpd-frontend
+     ```
+     Or you can get its url from below command:
+     ```
+     minikube service lamp-httpd-frontend --url
+     ```
+     
+
+    
 <br/>
 
 
