@@ -226,10 +226,10 @@ kubectl describe deployment <deployment-name>
           resources:
             requests:
                 cpu: "50m"
-                memory: "128Mi"
+                memory: "512Mi"
             limits:
                 cpu: "100m"
-                memory: "256Mi"
+                memory: "1024Mi"
     ```
     Where:  
      &emsp;&emsp; • 1000m = 1 full CPU core  
