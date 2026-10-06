@@ -116,7 +116,7 @@ minikube delete     #Delete the cluster: Wipes out the cluster instance and free
 ```
 
 ### Advanced Cluster Management:  
-- <ins>Set resource usage for a node when starting a cluster</ins>:  
+- **<ins>Set resource usage for a node when starting a cluster</ins>**:  
 ```
 minikube stop
 minikube start --cpus=4 --memory=8192mb --disk-size=50g  #for a single section
@@ -134,7 +134,7 @@ kubectl describe node minikube
 ```
 <br/>
 
-- <ins>Manually scale up/down infrastructure</ins>:  
+- **<ins>Manually scale up/down infrastructure</ins>**:  
 ```
 #Scale up:
 kubectl get nodes                    #List all node names
@@ -147,7 +147,7 @@ minikube node delete <node-name>
 ```
 <br/>
 
-- <ins>Manually scale up/down deployments (application workloads)</ins>:  
+- **<ins>Manually scale up/down deployments (application workloads)</ins>**:  
 ```
 kubectl get deployment                                                     #list all deployment names
 kubectl scale deployment/<deployment-name> --replicas=<number-of-pods>     #increase number of instances
@@ -158,7 +158,7 @@ kubectl get pods                                                            #che
 ```
 <br/>
 
-- <ins>Manage resources</ins>: CPUs, Memory  
+- **<ins>Manage resources</ins>**: CPUs, Memory  
   By default, Kubernetes does not enforce resource requests or limits on deployments or their pods. This means a standard deployment can technically consume as much CPU and memory as the underlying minikube cluster provides before getting throttled or crashing. To prevent resource competition among pods, you can set maximum resource usage for each pod or deployment.
 ```
 kubectl get deployment         #list all deployment names
@@ -181,7 +181,7 @@ kubectl describe deployment <deployment-name>
 ```
 <br/>
 
-- <ins>Horizontal Pod Autoscaling</ins>:  
+- **<ins>Horizontal Pod Autoscaling</ins>**:  
   A HorizontalPodAutoscaler (HPA) automatically updates workload resources like Deployments to adjust capacity based on demand. With horizontal scaling, the HPA automatically adds pods when demand goes up and removes them when demand drops.
 
   Below is an example of auto-scaling pods for the httpd, php-fpm  and mysql deployments. You can configure auto-scaling for httpd and php-fpm or mysql deployment alone.
@@ -357,7 +357,7 @@ kubectl describe deployment <deployment-name>
     ```
 <br/>
 
-- <ins>Load Balancer</ins>:  
+- **<ins>Load Balancer</ins>**:  
   In Minikube, the purpose of a LoadBalancer service type is to simulate a cloud-provider load balancer so you can expose your local Kubernetes applications externally and distribute incoming traffic across multiple pods.
 
   - Expose the deployment lamp-httpd-frontend using type LoadBalancer.
@@ -399,15 +399,17 @@ kubectl describe deployment <deployment-name>
      ```
      minikube tunnel
      ```
-   - Auto-Opens a Browser Window:
-     Run the command below to auto open a web browser that access your application deployment
+   - Auto-Opens a Browser Window:  
+     Run the command below to auto open a web browser that access your application deployment.
      ```
      minikube service <service-name>
      minikube service lamp-httpd-frontend
      ```
-     Or you can get its url from below command:
+     Or you can get its url from the below command:
      ```
-     minikube service lamp-httpd-frontend --url
+     $ minikube service lamp-httpd-frontend --url
+ 
+     http://192.168.49.2:30270     #example output 
      ```
      
 
