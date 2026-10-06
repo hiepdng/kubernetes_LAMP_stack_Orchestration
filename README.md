@@ -247,9 +247,9 @@ kubectl describe deployment <deployment-name>
     
     • <ins>Using command line</ins>:  
     ```
-    kubectl autoscale deployment lamp-httpd-frontend --cpu=50% --memory=50% --min=1 --max=5
-    kubectl autoscale deployment lamp-php-fpm-frontend --cpu=50% --memory=50% --min=1 --max=5
-    kubectl autoscale deployment lamp-mysql-backend --cpu=50% --memory=50% --min=1 --max=5
+    kubectl autoscale deployment lamp-httpd-frontend --cpu=50% --memory=50% --min=1 --max=3
+    kubectl autoscale deployment lamp-php-fpm-frontend --cpu=50% --memory=50% --min=1 --max=3
+    kubectl autoscale deployment lamp-mysql-backend --cpu=50% --memory=80% --min=1 --max=2
     ```
     or  
     • <ins>Using a manifest file</ins>:
@@ -267,7 +267,7 @@ kubectl describe deployment <deployment-name>
          kind: Deployment
          name: lamp-httpd-frontend
        minReplicas: 1
-       maxReplicas: 5
+       maxReplicas: 3
        metrics:
        - type: Resource
          resource:
@@ -293,7 +293,7 @@ kubectl describe deployment <deployment-name>
          kind: Deployment
          name: lamp-php-fpm-frontend
        minReplicas: 1
-       maxReplicas: 5
+       maxReplicas: 3
        metrics:
        - type: Resource
          resource:
@@ -319,7 +319,7 @@ kubectl describe deployment <deployment-name>
          kind: Deployment
          name: lamp-mysql-backend
        minReplicas: 1
-       maxReplicas: 5
+       maxReplicas: 2
        metrics:
        - type: Resource
          resource:
@@ -332,7 +332,7 @@ kubectl describe deployment <deployment-name>
            name: memory
            target:
              type: Utilization
-             averageUtilization: 50
+             averageUtilization: 80
      ```
     Apply the HorizontalPodAutoscaler
     ```bash
