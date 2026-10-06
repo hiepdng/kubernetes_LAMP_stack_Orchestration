@@ -116,7 +116,7 @@ minikube delete     #Delete the cluster: Wipes out the cluster instance and free
 ```
 
 ### Advanced Cluster Management:  
-- Set resource usage for a node when starting a cluster: 
+- <ins>Set resource usage for a node when starting a cluster</ins>:  
 ```
 minikube stop
 minikube start --cpus=4 --memory=8192mb --disk-size=50g  #for a single section
@@ -132,8 +132,9 @@ cat ~/.minikube/config/config.json
 minikube config view
 kubectl describe node minikube
 ```
+<br/>
 
-- Manually scale up/down infrastructure:
+- <ins>Manually scale up/down infrastructure</ins>:  
 ```
 #Scale up:
 kubectl get nodes                    #List all node names
@@ -144,8 +145,9 @@ minikube node add --control-plane    #Add a control plane for high availability
 kubectl drain <node-name> --ignore-daemonsets
 minikube node delete <node-name>
 ```
+<br/>
 
-- Manually scale up/down deployments (application workloads):
+- <ins>Manually scale up/down deployments (application workloads)</ins>:  
 ```
 kubectl get deployment                                                     #list all deployment names
 kubectl scale deployment/<deployment-name> --replicas=<number-of-pods>     #increase number of instances
@@ -154,8 +156,9 @@ kubectl scale deployment/lamp-php-fpm-frontend--replicas=3
 kubectl scale deployment/lamp-mysql-backend --replicas=2
 kubectl get pods                                                            #checking number of pods
 ```
+<br/>
 
-- Manage resources: CPUs, Memory  
+- <ins>Manage resources</ins>: CPUs, Memory  
   By default, Kubernetes does not enforce resource requests or limits on deployments or their pods. This means a standard deployment can technically consume as much CPU and memory as the underlying minikube cluster provides before getting throttled or crashing. To prevent resource competition among pods, you can set maximum resource usage for each pod or deployment.
 ```
 kubectl get deployment         #list all deployment names
@@ -176,8 +179,9 @@ kubectl patch deployment <deployment-name> --type json -p='[{"op": "remove", "pa
 #Verifying:
 kubectl describe deployment <deployment-name>
 ```
+<br/>
 
-- Horizontal Pod Autoscaling:  
+- <ins>Horizontal Pod Autoscaling</ins>:  
   A HorizontalPodAutoscaler (HPA) automatically updates workload resources like Deployments to adjust capacity based on demand. With horizontal scaling, the HPA automatically adds pods when demand goes up and removes them when demand drops.
 
   Below is an example of auto-scaling pods for the httpd, php-fpm  and mysql deployments. You can configure auto-scaling for httpd and php-fpm or mysql deployment alone.
@@ -351,8 +355,9 @@ kubectl describe deployment <deployment-name>
     kubectl top pods                                           #show resource usage
     kubectl logs -n kube-system deployment/metrics-server      #show metrics-server log
     ```
+<br/>
 
-- Load Balancer:
+- <ins>Load Balancer</ins>:
 <br/>
 
 
