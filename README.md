@@ -338,7 +338,7 @@ kubectl describe deployment <deployment-name>
     ```bash
     kubectl apply --validate=true -f hpa.yaml
     ```
-    - Step 4: Verifying
+  - Step 4: Verifying
     ```
     kubectl get all -A                                         #display basic, workload-related resources
     kubectl get hpa                                            #check HPA Status
@@ -354,7 +354,10 @@ kubectl describe deployment <deployment-name>
 
 <br/>
 
-### Checking:
+---
+<br/>
+
+#### Some other commands for debuging:
 ```
 #Minikube cluster info:
 kubectl get pods -n kube-system #lists all the running and pending pods within the internal kube-system
@@ -449,7 +452,7 @@ kubectl scale deployment lamp-mysql --replicas=0    #stop lamp-mysql app
 ```
 <br/>
 
-### Kubernetes Clean up:
+#### Kubernetes Clean up:
 - Clean Up All Workloads Across All Namespaces:
 ```
 kubectl get all                           #List pods, services, deployment, replica...
