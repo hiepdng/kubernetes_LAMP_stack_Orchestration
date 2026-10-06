@@ -53,7 +53,9 @@ This will create images:
   - You need to mount the full path of the **docker_build** directory from your host machine to Minikube cluster for Apache, PHP and Mysql applications to access their files. It is better to mount it here when you start your Minikube cluster.
   - Note: Your full path to the **docker_build** directory might be different.  
 ```
-minikube start --driver=docker --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/myvol"
+minikube start --driver=docker \
+  --addons=metrics-server \
+  --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/myvol"
 
 #or without mounting option
 minikube start --driver=docker
@@ -182,13 +184,14 @@ kubectl describe deployment <deployment-name>
 
   The following are steps to enable HPA:
 
-  - Step 1: Enable Metrics Server
-   ```
-   minikube addons enable metrics-server                  #enable metrics-server
-   kubectl get apiservices                                #check v1beta1.metrics.k8s.io service is available
-   kubectl get pods -n kube-system | grep metrics-server  #check if metrics-server is running 
-   minikube addons list                                   #check if the metrics-server addon is enable
-   ```
+  - Step 1: Enable Metrics Server  
+    Enable the metrics-server addon if you did not do so when running the minikube start command.
+    ```
+    minikube addons enable metrics-server                  #enable metrics-server
+    kubectl get apiservices                                #check v1beta1.metrics.k8s.io service is available
+    kubectl get pods -n kube-system | grep metrics-server  #check if metrics-server is running 
+    minikube addons list                                   #check if the metrics-server addon is enable
+    ```
   - Step 2: Create a Deployment with Resource Requests  
     Your pods must define CPU or memory requests so the HPA knows when to scale. The below are examples of the httpd, php-fpm and mysql deployments that define request resources:  
     ```yaml
@@ -254,7 +257,7 @@ kubectl describe deployment <deployment-name>
     or  
     • <ins>Using a manifest file</ins>:
      ```yaml
-     hpa.yaml
+     k8s_hpa.yaml
      
      ---
      apiVersion: autoscaling/v2
@@ -336,7 +339,7 @@ kubectl describe deployment <deployment-name>
      ```
     Apply the HorizontalPodAutoscaler
     ```bash
-    kubectl apply --validate=true -f hpa.yaml
+    kubectl apply --validate=true -f k8s_hpa.yaml
     ```
   - Step 4: Verifying
     ```
@@ -348,7 +351,8 @@ kubectl describe deployment <deployment-name>
     kubectl top pods                                           #show resource usage
     kubectl logs -n kube-system deployment/metrics-server      #show metrics-server log
     ```
-    
+
+- Load Balancer:
 <br/>
 
 
