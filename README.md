@@ -201,10 +201,10 @@ kubectl describe deployment <deployment-name>
           imagePullPolicy: Never
           resources:
             requests:
-                cpu: "100m"
+                cpu: "50m"
                 memory: "128Mi"
             limits:
-                cpu: "200m"
+                cpu: "100m"
                 memory: "256Mi"
     ...
       containers:
@@ -213,10 +213,10 @@ kubectl describe deployment <deployment-name>
           imagePullPolicy: Never
           resources:
             requests:
-                cpu: "100m"
+                cpu: "50m"
                 memory: "128Mi"
             limits:
-                cpu: "200m"
+                cpu: "100m"
                 memory: "256Mi"
     ...
       containers:
@@ -225,10 +225,10 @@ kubectl describe deployment <deployment-name>
           imagePullPolicy: Never
           resources:
             requests:
-                cpu: "100m"
+                cpu: "50m"
                 memory: "128Mi"
             limits:
-                cpu: "200m"
+                cpu: "100m"
                 memory: "256Mi"
     ```
     Where:  
