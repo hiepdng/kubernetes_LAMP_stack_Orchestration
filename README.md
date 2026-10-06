@@ -360,7 +360,9 @@ kubectl describe deployment <deployment-name>
 - **<ins>Load Balancer</ins>**:  
   In Minikube, the purpose of a LoadBalancer service type is to simulate a cloud-provider load balancer so you can expose your local Kubernetes applications externally and distribute incoming traffic across multiple pods.
 
-  - Expose the deployment lamp-httpd-frontend using type LoadBalancer.
+  LoadBalancer can be used with HorizontalScaling. If number of replicas of deployments is more than 2, it will route network traffic to those Pods and automatically load balance traffic between them.  
+   
+  - Expose the deployment _lamp-httpd-frontend_ using type LoadBalancer.
     - Using command line:
     ```
     kubectl expose deployment <deployment-name> --type="LoadBalancer"
@@ -411,9 +413,45 @@ kubectl describe deployment <deployment-name>
  
      http://192.168.49.2:30270     #example output 
      ```
-     
+<br/>
 
-    
+- **<ins>Self-Healing</ins>**:  
+  Kubernetes will automatically restarts failed containers, replaces unhealthy ones, and reschedules them when a server breaks.  
+  - To test the Self-Healing feature, run _lamp-httpd-frontend_ deployment as two replicas
+  ```yaml
+  k8s_lampstack_deploy.yaml
+  
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: lamp-httpd-frontend
+    labels:
+      app: lamp
+  spec:
+    replicas: 2
+  ```
+  - Update the deployment:
+  ```
+  kubectl apply --validate=true -f k8s_lampstack_deploy.yaml
+  ```
+  - Delete a pod:
+  ```yaml
+  kubectl get pods
+  NAME                                     READY   STATUS    RESTARTS   AGE
+  lamp-httpd-frontend-564cdc8b46-jtgjf     1/1     Running   0          14m
+  lamp-httpd-frontend-564cdc8b46-nnm6c     1/1     Running   0          11m
+
+  kubectl delete pod lamp-httpd-frontend-564cdc8b46-jtgjf
+  ```
+  - Verify Self-Healing feature:
+    Kubernetes will automatically create a new pod to ensure that two replicas of the _lamp-httpd-frontend_ deployment are running.
+  ```yaml
+  kubectl get pods
+  NAME                                     READY   STATUS    RESTARTS   AGE
+  lamp-httpd-frontend-564cdc8b46-nnm6c     1/1     Running   0          16m
+  lamp-httpd-frontend-564cdc8b46-w6d7b     1/1     Running   0          6s
+  ```
+  
 <br/>
 
 
