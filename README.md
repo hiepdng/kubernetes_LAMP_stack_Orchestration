@@ -416,7 +416,8 @@ kubectl describe deployment <deployment-name>
 <br/>
 
 - **<ins>Self-Healing</ins>**:  
-  Kubernetes will automatically restarts failed containers, replaces unhealthy ones, and reschedules them when a server breaks.  
+  Kubernetes will automatically restarts failed containers, replaces unhealthy ones, and reschedules them when a server breaks.
+  
   - To test the Self-Healing feature, run _lamp-httpd-frontend_ deployment as two replicas
   ```yaml
   k8s_lampstack_deploy.yaml
@@ -455,7 +456,8 @@ kubectl describe deployment <deployment-name>
 
 - **<ins>Automated Rollouts, Updates and Rollbacks</ins>**:  
   You can test Kubernetes rollouts, updates, and rollbacks locally using minikube by deploying an application, updating its image version, and undoing the deployment if problems arise.
-  
+
+  **Start Minikube and Create a Deployment**:  
   - Start your local cluster:  
   ```
   minikube start
@@ -468,8 +470,8 @@ kubectl describe deployment <deployment-name>
   ```
   kubectl expose deployment nginx-app --type=NodePort --port=80
   ```
-  - Trigger a Rolling Update (Rollout):  
-    Update the container image to a newer version (e.g., 1.16). Kubernetes handles this as a zero-downtime rolling update:  
+  **Trigger a Rolling Update (Rollout)**:  
+  - Update the container image to a newer version (e.g., 1.16). Kubernetes handles this as a zero-downtime rolling update:  
   ```
   kubectl set image deployment/nginx-app nginx=nginx:1.16
   ```
@@ -481,8 +483,8 @@ kubectl describe deployment <deployment-name>
   ```
   kubectl rollout history deployment/nginx-app
   ```
-  - Rollback to a Stable Version:
-    If a newly updated image introduces a bug or fails (such as an ImagePullBackOff error), you can instantly revert the deployment to the previous stable revision:  
+  **Rollback to a Stable Version**:  
+  - If a newly updated image introduces a bug or fails (such as an ImagePullBackOff error), you can instantly revert the deployment to the previous stable revision:  
   ```
   kubectl rollout undo deployment/nginx-app
   ```
