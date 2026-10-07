@@ -502,6 +502,8 @@ kubectl describe deployment <deployment-name>
     As cluster administrator, create a PersistentVolume backed by physical storage. and do not associate the volume with any Pod.
     
     ```yaml
+    pv_pvc.yaml
+    
     apiVersion: v1
     kind: PersistentVolume
     metadata:
@@ -521,6 +523,8 @@ kubectl describe deployment <deployment-name>
     As a developer/cluster user, create a PersistentVolumeClaim that is automatically bound to a suitable PersistentVolume.
 
     ```yaml
+    pv_pvc.yaml
+    
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
@@ -534,6 +538,15 @@ kubectl describe deployment <deployment-name>
           storage: 3Gi
     ```
 
+  - Apply the configuration:  
+    ```
+    kubectl apply -f pv_pvc.yaml
+    kubectl apply -f nginx.yaml
+
+    kubectl get pv task-pv-volume       #verifying ps
+    kubectl get pvc task-pv-claim       #veryfying pvc
+    kubectl get pod task-pv-pod         #veryifying pod
+    ```  
 
 
 
