@@ -40,6 +40,7 @@ sh setup.sh
 - **Build httpd, mysql, php-fpm images**  
 ```
 docker compose build --no-cache
+docker images                      #list all docker images
 ```
 This will create images:  
     . lamp-httpd:2.4.68-debian13  
