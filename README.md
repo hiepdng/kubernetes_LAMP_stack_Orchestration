@@ -513,7 +513,7 @@ kubectl describe deployment <deployment-name>
     spec:
       storageClassName: manual
       capacity:
-        storage: 10Gi
+        storage: 1Gi
       accessModes:
         - ReadWriteOnce
       hostPath:
@@ -535,7 +535,7 @@ kubectl describe deployment <deployment-name>
         - ReadWriteOnce
       resources:
         requests:
-          storage: 3Gi
+          storage: 500Mi
     ```
   - Create a Pod:  
     Create a Pod that uses the above PersistentVolumeClaim for storage.  
@@ -563,6 +563,8 @@ kubectl describe deployment <deployment-name>
     ```
   - Apply the configuration:  
     ```
+    minikube delete all --all
+    minikube start --driver=docker  --mount --mount-string="/home/temp/data:/mnt/data"    #mount local host dir to pod dir
     kubectl apply -f pv_pvc.yaml
     kubectl apply -f nginx.yaml
 
