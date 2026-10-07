@@ -582,7 +582,7 @@ kubectl describe deployment <deployment-name>
     kubectl exec task-pv-pod -- cat /usr/share/nginx/html/index.html
     ```
 
-    You will see the content of the "/usr/share/nginx/html" and /home/temp/data" directories are the same. The content of index.html file persists even the pod was deleted and updated.
+    You will see the content of the "/usr/share/nginx/html" and /home/temp/data" directories are the same. The content of the index.html file persists even the pod was deleted and updated.
 
 
 
