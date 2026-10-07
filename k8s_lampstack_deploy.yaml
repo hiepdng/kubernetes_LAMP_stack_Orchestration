@@ -113,9 +113,6 @@ spec:
         app: lamp
         tier: frontend
     spec:
-      volumes:
-        - name: shared-html
-          emptyDir: {}
       containers:
         - image: lamp-httpd:2.4.68-debian13
           imagePullPolicy: Never
