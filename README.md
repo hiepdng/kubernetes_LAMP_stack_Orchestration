@@ -564,7 +564,7 @@ kubectl describe deployment <deployment-name>
   - Apply the configuration:  
     ```
     minikube delete all --all
-    minikube start --driver=docker  --mount --mount-string="/home/temp/data:/mnt/data"    #mount local host dir to pod dir
+    minikube start --driver=docker --mount --mount-string="/home/temp/data:/mnt/data"    #mount local host dir to pod dir
     kubectl apply -f pv_pvc.yaml
     kubectl apply -f nginx.yaml
 
