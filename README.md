@@ -571,7 +571,8 @@ kubectl describe deployment <deployment-name>
     kubectl get pv task-pv-volume       #verifying ps
     kubectl get pvc task-pv-claim       #veryfying pvc
     kubectl get pod task-pv-pod         #veryifying pod
-    ```  
+    ```
+    You will see the content of the "/usr/share/nginx/html" and /home/temp/data" directories are the same.
 
 
 
