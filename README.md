@@ -570,11 +570,19 @@ kubectl describe deployment <deployment-name>
     kubectl apply -f pv_pvc.yaml
     kubectl apply -f nginx.yaml
 
-    kubectl get pv task-pv-volume       #verifying ps
-    kubectl get pvc task-pv-claim       #veryfying pvc
-    kubectl get pod task-pv-pod         #veryifying pod
+    kubectl get pv,pvc,pod              #verify pv, pvc, pod
     ```
-    You will see the content of the "/usr/share/nginx/html" and /home/temp/data" directories are the same.
+  - Test Data Persistence:
+    ```
+    kubectl exec task-pv-pod -- sh -c "echo 'Hello from Persistent Storage!' > /usr/share/nginx/html/index.html"
+
+    kubectl delete pod task-pv-pod
+    kubectl apply -f nginx.yaml
+
+    kubectl exec task-pv-pod -- cat /usr/share/nginx/html/index.html
+    ```
+
+    You will see the content of the "/usr/share/nginx/html" and /home/temp/data" directories are the same. The content of index.html file persists even the pod was deleted and updated.
 
 
 
