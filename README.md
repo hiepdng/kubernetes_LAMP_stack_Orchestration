@@ -60,7 +60,6 @@ minikube start --driver=docker \
 #or mounting the directory after starting minikuber cluster
 minikube start --driver=docker
 minikube mount /home/temp/kubernetes_LAMP_stack_Orchestration/docker_build:/tmp
-
 ```
 - **Share external config file using ConfigMap:**  
 Use ConfigMap to access httpd.conf, httpd-ssl.conf and php.ini from your host machine.
