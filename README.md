@@ -521,6 +521,8 @@ kubectl describe deployment <deployment-name>
     ```
   - Create a PersistentVolumeClaim:  
     As a developer/cluster user, create a PersistentVolumeClaim that is automatically bound to a suitable PersistentVolume.
+ 
+    The example below is the demonstration of auto mounting the nginx image directory "/usr/share/nginx/htm" directory to the locahost directory "/home/temp/data".  
 
     ```yaml
     pv_pvc.yaml
