@@ -2,7 +2,7 @@
 
 <br/>
 
-To focus on Kubernetes containerization and orchestration, I include a directory [docker_build](https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_deployment/tree/main/docker_build), which is a pre-configured LAMP stack IaC from my other project [docker_build_DHI_LAMP_Project](https://github.com/hiepdng/docker_build_DHI_LAMP_Project). All you need to do is to use these code to build the LAMP stack images, then use Kubernetes to containerize and orchestrate the LAMP stack.  
+To focus on Kubernetes containerization and orchestration, I include a directory [docker_build](https://github.com/hiepdng/kubernetes_LAMP_stack_Orchestration/tree/main/docker_build), which is a pre-configured LAMP stack IaC from my other project [docker_build_DHI_LAMP_Project](https://github.com/hiepdng/docker_build_DHI_LAMP_Project). All you need to do is to use these code to build the LAMP stack images, then use Kubernetes to containerize and orchestrate the LAMP stack.  
 
 <br/>
 <br/>
@@ -25,7 +25,7 @@ On a Linux machine, run the following commands to build LAMP stack images:
 
 - **Download the repository**
 ```
-git clone https://github.com/hiepdng/kubernetes_github_action_LAMP_stack_deployment.git
+git clone https://github.com/hiepdng/kubernetes_LAMP_stack_Orchestration.git
 ```
 - **Login to dockerhub from your terminal**
 ```
@@ -34,7 +34,7 @@ docker login dhi.io
 - **Configure/setup environment**  
   This will set up directories, create certificates and modify configuration files 
 ```
-cd kubernetes_github_action_LAMP_stack_deployment/docker_build
+cd kubernetes_LAMP_stack_Orchestration/docker_build
 sh setup.sh
 ```
 - **Build httpd, mysql, php-fpm images**  
@@ -55,21 +55,21 @@ This will create images:
 ```
 minikube start --driver=docker \
   --addons=metrics-server \
-  --mount --mount-string="/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/myvol"
+  --mount --mount-string="/home/temp/kubernetes_LAMP_stack_Orchestration/docker_build:/myvol"
 
 #or without mounting option
 minikube start --driver=docker
-minikube mount /home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build:/tmp
+minikube mount /home/temp/kubernetes_LAMP_stack_Orchestration/docker_build:/tmp
 
 ```
 - **Share external config file using ConfigMap:**  
 Use ConfigMap to access httpd.conf, httpd-ssl.conf and php.ini from your host machine.
 
 ```
-kubectl create configmap httpd-conf --from-file=httpd.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd.conf
-kubectl create configmap httpd-ssl-conf --from-file=httpd-ssl.conf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/httpd-ssl.conf
-kubectl create configmap php-ini --from-file=php.ini=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/php.ini
-kubectl create configmap my-cnf --from-file=my.cnf=/home/temp/kubernetes_github_action_LAMP_stack_deployment/docker_build/etc/my.cnf
+kubectl create configmap httpd-conf --from-file=httpd.conf=/home/temp/kubernetes_LAMP_stack_Orchestration/docker_build/etc/httpd.conf
+kubectl create configmap httpd-ssl-conf --from-file=httpd-ssl.conf=/home/temp/kubernetes_LAMP_stack_Orchestration/docker_build/etc/httpd-ssl.conf
+kubectl create configmap php-ini --from-file=php.ini=/home/temp/kubernetes_LAMP_stack_Orchestration/docker_build/etc/php.ini
+kubectl create configmap my-cnf --from-file=my.cnf=/home/temp/kubernetes_LAMP_stack_Orchestration/docker_build/etc/my.cnf
 
 kubectl get configmaps -A    #list all configmaps
 ```
