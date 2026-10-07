@@ -10,7 +10,7 @@
   <li><a href="upload.php">Files Upload</a></li>
   <li><a href="database.php">Database Insert and Display</a></li>
   <li><a href="phpinfo.php">PHP Info</a></li>
-  <li><a href="cpu_load.php">CPU and Memory Load Test</a></li>
+  <li><a href="cpu_memory_load_test.php">CPU and Memory Load Test</a></li>
 </ul>
 </body>
 </html>
