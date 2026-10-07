@@ -457,7 +457,7 @@ kubectl describe deployment <deployment-name>
 - **<ins>Automated Rollouts, Updates and Rollbacks</ins>**:  
   You can test Kubernetes rollouts, updates, and rollbacks locally using minikube by deploying an application, updating its image version, and undoing the deployment if problems arise.
 
-  **Start Minikube and Create a Deployment**:  
+  #### Start Minikube and Create a Deployment:  
   - Start your local cluster:  
   ```
   minikube start
@@ -470,7 +470,7 @@ kubectl describe deployment <deployment-name>
   ```
   kubectl expose deployment nginx-app --type=NodePort --port=80
   ```
-  **Trigger a Rolling Update (Rollout)**:  
+  #### Trigger a Rolling Update (Rollout):  
   - Update the container image to a newer version (e.g., 1.16). Kubernetes handles this as a zero-downtime rolling update:  
   ```
   kubectl set image deployment/nginx-app nginx=nginx:1.16
@@ -483,7 +483,7 @@ kubectl describe deployment <deployment-name>
   ```
   kubectl rollout history deployment/nginx-app
   ```
-  **Rollback to a Stable Version**:  
+  #### Rollback to a Stable Version:  
   - If a newly updated image introduces a bug or fails (such as an ImagePullBackOff error), you can instantly revert the deployment to the previous stable revision:  
   ```
   kubectl rollout undo deployment/nginx-app
@@ -495,8 +495,57 @@ kubectl describe deployment <deployment-name>
   
 <br/>
 
----
+- **<ins>Storage Orchestration</ins>**:  
+  Automatically mounts storage systems of your choice—such as local storage or public cloud providers—to your containers.
+  
+  - Create a PersistentVolume:  
+    As cluster administrator, create a PersistentVolume backed by physical storage. and do not associate the volume with any Pod.
+    
+    ```yaml
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: task-pv-volume
+      labels:
+        type: local
+    spec:
+      storageClassName: manual
+      capacity:
+        storage: 10Gi
+      accessModes:
+        - ReadWriteOnce
+      hostPath:
+        path: "/mnt/data"
+    ```
+  - Create a PersistentVolumeClaim:  
+    As a developer/cluster user, create a PersistentVolumeClaim that is automatically bound to a suitable PersistentVolume.
+
+    ```yaml
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: task-pv-claim
+    spec:
+      storageClassName: manual
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 3Gi
+    ```
+
+
+
+
+
+
+
 <br/>
+<br/>
+<br/>
+<br/>
+
+---
 
 #### Some other commands for debuging:
 ```
