@@ -537,7 +537,30 @@ kubectl describe deployment <deployment-name>
         requests:
           storage: 3Gi
     ```
-
+  - Create a Pod:  
+    Create a Pod that uses the above PersistentVolumeClaim for storage.  
+    ```yaml
+    nginx.yaml
+    
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: task-pv-pod
+    spec:
+      containers:
+        - name: task-pv-container
+          image: nginx
+          ports:
+            - containerPort: 80
+              name: "http-server"
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html"
+              name: task-pv-storage
+      volumes:
+        - name: task-pv-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+    ```
   - Apply the configuration:  
     ```
     kubectl apply -f pv_pvc.yaml
