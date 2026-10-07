@@ -57,7 +57,7 @@ minikube start --driver=docker \
   --addons=metrics-server \
   --mount --mount-string="/home/temp/kubernetes_LAMP_stack_Orchestration/docker_build:/myvol"
 
-#or without mounting option
+#or mounting the directory after starting minikuber cluster
 minikube start --driver=docker
 minikube mount /home/temp/kubernetes_LAMP_stack_Orchestration/docker_build:/tmp
 
