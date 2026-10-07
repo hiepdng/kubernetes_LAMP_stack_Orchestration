@@ -341,7 +341,11 @@ kubectl describe deployment <deployment-name>
     ```bash
     kubectl apply --validate=true -f k8s_hpa.yaml
     ```
-  - Step 4: Verifying
+  - Step 4: CPU and Memory Load Testing  
+    Click on http://127.0.0.1:8008/cpu_load.php to run cpu and memory load test.  
+    
+  - Step 5: Verifying  
+    Verifying number of pods increasing/decreasing based on resource usage.  
     ```
     kubectl get all -A                                         #display basic, workload-related resources
     kubectl get hpa                                            #check HPA Status
