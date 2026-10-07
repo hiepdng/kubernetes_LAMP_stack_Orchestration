@@ -92,10 +92,6 @@ kubectl apply --validate=true -f k8s_lampstack_deploy.yaml
 Run the following command to forward pod Apache port 8080 to your host port 8008
 ```
 kubectl port-forward svc/httpd-service 8008:8080    #pod:8080, host:8008
-
-or
-minikube service httpd-service --url                #used with nodePort
-minikube tunnel                                     #For LoadBalancer services
 ```
 To access your webpage, goto http://127.0.0.1:8008
 
