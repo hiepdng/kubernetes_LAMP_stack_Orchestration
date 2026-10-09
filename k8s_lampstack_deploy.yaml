@@ -26,8 +26,9 @@ metadata:
 spec:
   ports:
     - name: http
-      port: 8080             #port access inside the cluster network
-      targetPort: 8080       #port match the containerPort in the Deployment
+      port: 8080             #pod port
+      targetPort: 8080       #application port
+#      nodeport: 3000        #node port
     - name: https
       port: 443
       targetPort: 443
